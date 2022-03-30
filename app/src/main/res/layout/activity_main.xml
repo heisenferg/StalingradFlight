@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/mifondo" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/bando"
         android:layout_width="391dp"
         android:layout_height="118dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.244"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/bando"
         app:layout_constraintVertical_bias="0.309"
         app:srcCompat="@drawable/nazimap" />
 

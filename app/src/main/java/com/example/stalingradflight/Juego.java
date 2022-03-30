@@ -69,7 +69,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
-       // bmpMapa.createScaledBitmap(bmpMapa, maxX, maxY, true);
+        bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
 
         //Cargamos mapa
        // cargarFondo();

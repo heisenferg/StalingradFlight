@@ -78,7 +78,7 @@ public class BucleJuego extends Thread {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
-            Log.d(TAG, "Nueva iteración!");
+           // Log.d(TAG, "Nueva iteración!");
         }
     }
 
