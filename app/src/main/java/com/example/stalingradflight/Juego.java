@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -47,18 +46,27 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private boolean hayToque=false;
     private ArrayList<Toque> toques = new ArrayList<Toque>();
     private Control[] controles = new Control[3];
-    private final int ARRIBA=0;
-    private final int ABAJO=1;
+    private final int IZQUIERDA =0;
+    private final int DERECHA =1;
     private final int DISPARO=2;
+    private float velocidad;
+    //Fondo
+    private Bitmap fondos[] = new Bitmap[2];
+    private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
 
     public Juego(Activity context) {
         super(context);
         holder = getHolder();
         holder.addCallback(this);
+      //  cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
+
+        //Cargamos mapa
+       // cargarFondo();
+
         if (MainActivity.BANDO == 1){
-            avion = BitmapFactory.decodeResource(getResources(), R.drawable.avionnazi);
+            avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane);
         } else {
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
         }
@@ -72,6 +80,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         Point mdispSize = new Point();
         mdisp.getSize(mdispSize);
 
+        //Velocidad:
+        velocidad = mapaW/5/bucle.MAX_FPS;
+
 
         velocidadAvion[x] = maxX/tiempoCrucePantalla;
         velocidadAvion[y] = 0;
@@ -80,7 +91,18 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     }
 
+/*
+    public void cargarFondo(){
+        for(int i=0;i<2;i++) {
+            bmpMapa = BitmapFactory.decodeResource(getResources(), image_fondo[i]);
+            if(fondos[i]==null)
+                fondos[i] = bmpMapa.createScaledBitmap(bmpMapa, maxX, maxY, true);
+            bmpMapa.recycle();
+        }
+    }
 
+
+*/
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -171,10 +193,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
         }
 
-        if (controles[ARRIBA].pulsado){
+        if (controles[IZQUIERDA].pulsado){
 
         }
-        if (controles[ABAJO].pulsado){
+        if (controles[DERECHA].pulsado){
 
         }
         if (controles[DISPARO].pulsado){
@@ -226,15 +248,15 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         float aux;
 
         //Izquierda
-        controles[ARRIBA]=new Control(getContext(),0,maxY/5*4);
-        controles[ARRIBA].Cargar(R.drawable.izquierda);
-        controles[ARRIBA].nombre="Izquieda";
+        controles[IZQUIERDA]=new Control(getContext(),0,maxY/5*4);
+        controles[IZQUIERDA].Cargar(R.drawable.izquierda);
+        controles[IZQUIERDA].nombre="Izquieda";
 
         //Derecha
-        controles[ABAJO]=new Control(getContext(),
+        controles[DERECHA]=new Control(getContext(),
                 controles[0].xCoordenada+controles[0].Ancho(), controles[0].yCoordenada);
-        controles[ABAJO].Cargar(R.drawable.derecha);
-        controles[ABAJO].nombre="Derecha";
+        controles[DERECHA].Cargar(R.drawable.derecha);
+        controles[DERECHA].nombre="Derecha";
 
         //disparo
         aux=6.0f/7.0f*maxX; //en los 6/7 del ancho
