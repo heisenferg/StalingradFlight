@@ -194,10 +194,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         }
 
         if (controles[IZQUIERDA].pulsado){
-
+            //Controlamos que no se salga por la izquierda.
+            if (xAvion >=0)
+                xAvion = (int) (xAvion - velocidad);
         }
         if (controles[DERECHA].pulsado){
-
+            //Controlamos que no se salga por la derecha.
+            if (xAvion <maxX-avion.getWidth())
+                xAvion = (int) (xAvion + velocidad);
         }
         if (controles[DISPARO].pulsado){
 
