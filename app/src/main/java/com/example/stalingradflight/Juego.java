@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
 import android.view.Display;
@@ -56,17 +57,18 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private Bitmap fondos[] = new Bitmap[2];
     private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
     private int AnchoPantalla,AltoPantalla;
-
+    private boolean derrota=false;
+    private MediaPlayer reprductor;
 
     public Juego(Activity context) {
         super(context);
         activity = context;
         holder = getHolder();
         holder.addCallback(this);
-        CalculaTamañoPantalla();
+        dimesionesPantalla();
        // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
-
+        sonidoAvion();
 
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
         bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
@@ -111,7 +113,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 */
 
 
-public void CalculaTamañoPantalla(){
+public void dimesionesPantalla(){
     if(Build.VERSION.SDK_INT > 13) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -246,7 +248,7 @@ public void CalculaTamañoPantalla(){
             myPaint.setStyle(Paint.Style.STROKE);
             myPaint.setColor(Color.WHITE);
 
-            //Toda el canvas en rojo
+            //Toda el canvas en negro
             canvas.drawColor(Color.BLACK);
 
             //Dibujar mapa
@@ -360,5 +362,30 @@ public void CalculaTamañoPantalla(){
         }
 
         return true;
+    }
+
+
+    public void sonidoAvion(){
+        if (MainActivity.BANDO==1){
+            reprductor = MediaPlayer.create(activity, R.raw.aircraftengine);
+            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            reprductor.start();
+        } else if (MainActivity.BANDO==2) {
+            reprductor = MediaPlayer.create(activity, R.raw.comunistengine);
+            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            reprductor.start();
+        }
+
+
     }
 }
