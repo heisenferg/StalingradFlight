@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     private Bitmap bmpMapa;
     private Bitmap avion;
+    private Bitmap misilEnemigo;
     private SurfaceHolder holder;
     private BucleJuego bucle;
     private Activity activity;
@@ -58,7 +59,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
     private int AnchoPantalla,AltoPantalla;
     private boolean derrota=false;
+    private boolean victoria=false;
     private MediaPlayer reprductor;
+    private int nivel;
+    private int misilesDestruidos=0;
 
     public Juego(Activity context) {
         super(context);
@@ -66,6 +70,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         holder = getHolder();
         holder.addCallback(this);
         dimesionesPantalla();
+        nivel=1;
        // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
         sonidoAvion();
@@ -111,6 +116,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         }
     }
 */
+
+    public void pintarEnemigo(){
+        //misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
+    }
 
 
 public void dimesionesPantalla(){
@@ -220,6 +229,9 @@ public void dimesionesPantalla(){
             }
         }
 
+        /**
+         * CONTROLES
+         */
         if (controles[IZQUIERDA].pulsado){
             //Controlamos que no se salga por la izquierda.
             if (xAvion >=0)
@@ -234,7 +246,21 @@ public void dimesionesPantalla(){
 
         }
 
-
+        /**
+         * NIVELES
+         */
+        if (misilesDestruidos>=10){
+            nivel=2;
+        }
+        if (misilesDestruidos>=20){
+            nivel=3;
+        }
+        if (misilesDestruidos>=30){
+            nivel=4;
+        }
+        if (misilesDestruidos==40){
+            victoria = true;
+        }
     }
 
     /**
