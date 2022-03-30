@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.os.Build;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -21,6 +22,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private Bitmap avion;
     private SurfaceHolder holder;
     private BucleJuego bucle;
+    private Activity activity;
     private int x=0,y=1; //Coordenadas x e y para desplazar
     private int maxX=0;
     private int maxY=0;
@@ -53,14 +55,21 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     //Fondo
     private Bitmap fondos[] = new Bitmap[2];
     private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
+    private int AnchoPantalla,AltoPantalla;
+
 
     public Juego(Activity context) {
         super(context);
+        activity = context;
         holder = getHolder();
         holder.addCallback(this);
-      //  cargarFondo();
+        CalculaTamañoPantalla();
+       // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
+
+
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
+       // bmpMapa.createScaledBitmap(bmpMapa, maxX, maxY, true);
 
         //Cargamos mapa
        // cargarFondo();
@@ -71,8 +80,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
         }
         Log.d("BANDO: " , " es " + MainActivity.BANDO);
-        mapaH = bmpMapa.getHeight();
-        mapaW = bmpMapa.getWidth();
+       // mapaH = bmpMapa.getHeight();
+       // mapaW = bmpMapa.getWidth();
 
         deltaT = 1f/BucleJuego.MAX_FPS;
 
@@ -81,12 +90,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         mdisp.getSize(mdispSize);
 
         //Velocidad:
-        velocidad = mapaW/5/bucle.MAX_FPS;
+        velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
 
         velocidadAvion[x] = maxX/tiempoCrucePantalla;
         velocidadAvion[y] = 0;
-
 
 
     }
@@ -96,13 +104,29 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         for(int i=0;i<2;i++) {
             bmpMapa = BitmapFactory.decodeResource(getResources(), image_fondo[i]);
             if(fondos[i]==null)
-                fondos[i] = bmpMapa.createScaledBitmap(bmpMapa, maxX, maxY, true);
+                fondos[i] = bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
             bmpMapa.recycle();
         }
     }
-
-
 */
+
+
+public void CalculaTamañoPantalla(){
+    if(Build.VERSION.SDK_INT > 13) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        AnchoPantalla = size.x;
+        AltoPantalla = size.y;
+    }
+    else{
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        AnchoPantalla = display.getWidth();  // deprecated
+        AltoPantalla = display.getHeight();  // deprecated
+    }
+    Log.i(Juego.class.getSimpleName(), "alto:" + AltoPantalla + "," + "ancho:" + AnchoPantalla);
+}
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -119,6 +143,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         maxY = c.getHeight();
         holder.unlockCanvasAndPost(c);
 
+
         avionW = avion.getWidth();
         avionH = avion.getHeight();
         // creamos el game loop
@@ -131,7 +156,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
          posicionInicialAvion[x] = maxY*1/5 ;
 
 
-        destMapaY = (maxY-mapaH)/2;
+        destMapaY = (AnchoPantalla-AltoPantalla)/2;
 
 
         // se crea la superficie, creamos el game loop
@@ -225,7 +250,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawColor(Color.BLACK);
 
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, 0, destMapaY, null);
+            canvas.drawBitmap(bmpMapa, 0, 0, null);
 
             //Dibujar avión
             canvas.drawBitmap(avion, xAvion, yAvion, null);
@@ -234,7 +259,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
          /*   canvas.drawBitmap(avion, new Rect(puntero_Avion_sprite,0, puntero_Avion_sprite + (avionW /6), avionH *1/5),
                     new Rect( (int) posicionAvion[x], yAvion, (int) (avionW /6 ), destMapaY+mapaH*1/2), null);
 */
-            //dibujar un texto
+            //Control de frames
             myPaint.setStyle(Paint.Style.FILL);
             myPaint.setTextSize(40);
             canvas.drawText("Frames ejecutados:"+contadorFrames, 600, 1000, myPaint);
