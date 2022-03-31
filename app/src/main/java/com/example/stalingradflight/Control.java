@@ -17,7 +17,6 @@ public class Control {
     public String nombre;
 
 
-
     public Control(Context miContexto, float xCoordenada, float yCoordenada) {
         this.miContexto = miContexto;
         this.xCoordenada = xCoordenada;

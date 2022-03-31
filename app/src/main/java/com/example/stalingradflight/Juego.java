@@ -49,10 +49,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private boolean salta = false;
     private boolean hayToque=false;
     private ArrayList<Toque> toques = new ArrayList<Toque>();
-    private Control[] controles = new Control[3];
+    private Control[] controles = new Control[4];
     private final int IZQUIERDA =0;
     private final int DERECHA =1;
     private final int DISPARO=2;
+    private final int MUSICA=3;
     private float velocidad;
     //Fondo
     private Bitmap fondos[] = new Bitmap[2];
@@ -64,6 +65,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
+    public Virajes sonidos;
 
     public Juego(Activity context) {
         super(context);
@@ -111,16 +113,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     }
 
-/*
-    public void cargarFondo(){
-        for(int i=0;i<2;i++) {
-            bmpMapa = BitmapFactory.decodeResource(getResources(), image_fondo[i]);
-            if(fondos[i]==null)
-                fondos[i] = bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
-            bmpMapa.recycle();
-        }
-    }
-*/
+
 
     public void pintarEnemigo(){
         //misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
@@ -227,7 +220,7 @@ public void dimesionesPantalla(){
             salta = false;
         }
 
-        for (int i=0; i<3; i++){
+        for (int i=0; i<4; i++){
             if (controles[i].pulsado){
                 Log.d("Control: ", "Se ha pulsado " + controles[i].nombre);
             }
@@ -237,9 +230,12 @@ public void dimesionesPantalla(){
          * CONTROLES
          */
         if (controles[IZQUIERDA].pulsado){
+            //sonidos = new Virajes(this);
             //Controlamos que no se salga por la izquierda.
-            if (xAvion >=0)
+            if (xAvion >=0) {
                 xAvion = (int) (xAvion - velocidad);
+            }
+
         }
         if (controles[DERECHA].pulsado){
             //Controlamos que no se salga por la derecha.
@@ -247,7 +243,10 @@ public void dimesionesPantalla(){
                 xAvion = (int) (xAvion + velocidad);
         }
         if (controles[DISPARO].pulsado){
-
+balas();
+        }
+        if (controles[MUSICA].pulsado){
+            musicaFondo();
         }
 
         /**
@@ -299,7 +298,7 @@ public void dimesionesPantalla(){
 
             //Dibujar controles
             myPaint.setAlpha(400);
-            for (int i = 0; i<3; i++){
+            for (int i = 0; i<4; i++){
                 controles[i].Dibujar(canvas, myPaint);
             }
         }
@@ -324,6 +323,11 @@ public void dimesionesPantalla(){
         controles[DISPARO]=new Control(getContext(),aux,maxY-controles[0].Alto());
         controles[DISPARO].Cargar(R.drawable.disparo);
         controles[DISPARO].nombre="Fuego!";
+
+        //Poner música
+        controles[MUSICA] = new Control(getContext(), maxX-controles[0].Ancho(), maxY/5*4);
+        controles[MUSICA].Cargar(R.drawable.music);
+        controles[MUSICA].nombre="Music on";
     }
 
 
@@ -366,7 +370,7 @@ public void dimesionesPantalla(){
                 }
 
                 //se comprueba si se ha pulsado
-                for(int i=0;i<3;i++)
+                for(int i=0;i<4;i++)
                     controles[i].comprueba_Pulsado(x,y);
                 break;
 
@@ -376,17 +380,18 @@ public void dimesionesPantalla(){
                 }
 
                 //se comprueba si se ha soltado el botón
-                for(int i=0;i<3;i++)
+                for(int i=0;i<4;i++)
                     controles[i].compruebaSoltado(toques);
                 break;
 
             case MotionEvent.ACTION_UP:
                 synchronized(this) {
                     toques.clear();
+
                 }
                 hayToque=false;
                 //se comprueba si se ha soltado el botón
-                for(int i=0;i<3;i++)
+                for(int i=0;i<4;i++)
                     controles[i].compruebaSoltado(toques);
                 break;
         }
@@ -417,25 +422,42 @@ public void dimesionesPantalla(){
         }
     }
 
+
+    /**
+     * Ejemplo, hay que cambiar
+     */
+    public void balas(){
+        reprductor = MediaPlayer.create(activity, R.raw.chargeandfire);
+        reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.stop();
+            }
+        });
+        reprductor.start();
+    }
+
     public void musicaFondo(){
         if (MainActivity.BANDO==1){
-            musica = MediaPlayer.create(activity, R.raw.katilow);
-            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            reprductor = MediaPlayer.create(activity, R.raw.katilow);
+            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     mp.start();
                 }
             });
-            musica.start();
+            reprductor.start();
         } else if (MainActivity.BANDO==2) {
-            musica = MediaPlayer.create(activity, R.raw.katilow);
-            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            reprductor = MediaPlayer.create(activity, R.raw.katilow);
+            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     mp.start();
                 }
             });
-            musica.start();
+            reprductor.start();
         }
     }
+
+
 }
