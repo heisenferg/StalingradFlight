@@ -307,15 +307,22 @@ balas();
             //Dibujar avión
             canvas.drawBitmap(avion, xAvion, yAvion, null);
 
-            //Recortar muñeco
+            //Recortar avión
          /*   canvas.drawBitmap(avion, new Rect(puntero_Avion_sprite,0, puntero_Avion_sprite + (avionW /6), avionH *1/5),
                     new Rect( (int) posicionAvion[x], yAvion, (int) (avionW /6 ), destMapaY+mapaH*1/2), null);
 */
+
+
             //Control de frames
             myPaint.setStyle(Paint.Style.FILL);
             myPaint.setTextSize(40);
-            canvas.drawText("Frames ejecutados:"+contadorFrames, 600, 1000, myPaint);
 
+            myPaint.setColor(Color.GREEN);
+            canvas.drawText("Frames ejecutados:"+contadorFrames, 600, maxY/6*1, myPaint);
+            canvas.drawText("Nivel:"+ nivel, controles[DERECHA].xCoordenada+controles[DERECHA].Ancho()+50,
+                    controles[DERECHA].yCoordenada+controles[DERECHA].Alto()/2, myPaint);
+            canvas.drawText("Misiles destruidos:"+ misilesDestruidos, controles[DERECHA].xCoordenada+controles[DERECHA].Ancho()+50,
+                    controles[DERECHA].yCoordenada+controles[DERECHA].Alto()/2+50, myPaint);
 
             //Dibujar controles
             myPaint.setAlpha(400);
@@ -346,7 +353,7 @@ balas();
         controles[DISPARO].nombre="Fuego!";
 
         //Poner música
-        controles[MUSICA] = new Control(getContext(), aux, controles[0].yCoordenada/4*2);
+        controles[MUSICA] = new Control(getContext(), aux, controles[0].yCoordenada/4*1);
         controles[MUSICA].Cargar(R.drawable.musica);
         controles[MUSICA].nombre="Music on";
     }
