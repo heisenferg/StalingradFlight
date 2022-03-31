@@ -268,7 +268,8 @@ balas();
         }
 
 
-        if (contadorFrames%5 == 0){
+        //Cada dos frames, muevo el mapa 1 px
+        if (contadorFrames%2 == 0){
             mapaX = 0;
             mapaY = mapaY - 1;
         }
