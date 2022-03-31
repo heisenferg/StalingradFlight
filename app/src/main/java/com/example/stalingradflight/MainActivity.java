@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static int BANDO;
     ImageView naziButton, sovietButton, cab;
+    private MediaPlayer reproductor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
         cab = findViewById(R.id.bando);
         naziButton = findViewById(R.id.naziButton);
         sovietButton = findViewById(R.id.sovietButton);
-animarBandos();
+        animarBandos();
+        sonidos();
         naziButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BANDO = 1;
+                balas();
                 Intent i = new Intent(MainActivity.this, LanzadorJuego.class);
                 startActivity(i);
             }
@@ -39,13 +43,12 @@ animarBandos();
             @Override
             public void onClick(View v) {
                 BANDO = 2;
+                balas();
                 Intent i = new Intent(MainActivity.this, LanzadorJuego.class);
                 startActivity(i);
                   }
                 }
         );
-
-
 
     }
 
@@ -64,4 +67,27 @@ animarBandos();
         animador.play(rotacion).with(rotacion2).with(fadeIn);
         animador.start();
     }
+
+    public void sonidos(){
+            reproductor = MediaPlayer.create(this, R.raw.war);
+            reproductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            reproductor.start();
+    }
+
+    public void balas(){
+        reproductor = MediaPlayer.create(this, R.raw.chargeandfire);
+        reproductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.stop();
+            }
+        });
+        reproductor.start();
+    }
+
 }

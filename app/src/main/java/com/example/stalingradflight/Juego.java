@@ -61,6 +61,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private boolean derrota=false;
     private boolean victoria=false;
     private MediaPlayer reprductor;
+    private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
 
@@ -73,6 +74,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         nivel=1;
        // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
+
+        //No suena a la vez
+       // musicaFondo();
+
         sonidoAvion();
 
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
@@ -153,7 +158,6 @@ public void dimesionesPantalla(){
         maxX =c.getWidth();
         maxY = c.getHeight();
         holder.unlockCanvasAndPost(c);
-
 
         avionW = avion.getWidth();
         avionH = avion.getHeight();
@@ -396,8 +400,8 @@ public void dimesionesPantalla(){
             reprductor = MediaPlayer.create(activity, R.raw.aircraftengine);
             reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.start();
+                public void onCompletion(MediaPlayer mep) {
+                    mep.start();
                 }
             });
             reprductor.start();
@@ -405,13 +409,33 @@ public void dimesionesPantalla(){
             reprductor = MediaPlayer.create(activity, R.raw.comunistengine);
             reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.start();
+                public void onCompletion(MediaPlayer mep) {
+                    mep.start();
                 }
             });
             reprductor.start();
         }
+    }
 
-
+    public void musicaFondo(){
+        if (MainActivity.BANDO==1){
+            musica = MediaPlayer.create(activity, R.raw.katilow);
+            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            musica.start();
+        } else if (MainActivity.BANDO==2) {
+            musica = MediaPlayer.create(activity, R.raw.katilow);
+            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            musica.start();
+        }
     }
 }
