@@ -78,7 +78,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
         //No suena a la vez
-       // musicaFondo();
 
         sonidoAvion();
 
@@ -246,8 +245,28 @@ public void dimesionesPantalla(){
 balas();
         }
         if (controles[MUSICA].pulsado){
-            musicaFondo();
+            if (MainActivity.BANDO==1){
+                reprductor = MediaPlayer.create(activity, R.raw.marchlow);
+                reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mep) {
+                        mep.start();
+                    }
+                });
+                reprductor.start();
+            }
+            if (MainActivity.BANDO==2){
+                reprductor = MediaPlayer.create(activity, R.raw.katilow);
+                reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mep) {
+                        mep.start();
+                    }
+                });
+                reprductor.start();
+            }
         }
+
 
         /**
          * NIVELES
@@ -325,8 +344,8 @@ balas();
         controles[DISPARO].nombre="Fuego!";
 
         //Poner música
-        controles[MUSICA] = new Control(getContext(), maxX-controles[0].Ancho(), maxY/5*4);
-        controles[MUSICA].Cargar(R.drawable.music);
+        controles[MUSICA] = new Control(getContext(), aux, controles[0].yCoordenada/4*2);
+        controles[MUSICA].Cargar(R.drawable.musica);
         controles[MUSICA].nombre="Music on";
     }
 
@@ -437,27 +456,7 @@ balas();
         reprductor.start();
     }
 
-    public void musicaFondo(){
-        if (MainActivity.BANDO==1){
-            reprductor = MediaPlayer.create(activity, R.raw.katilow);
-            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
-            reprductor.start();
-        } else if (MainActivity.BANDO==2) {
-            reprductor = MediaPlayer.create(activity, R.raw.katilow);
-            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
-            reprductor.start();
-        }
-    }
+
 
 
 }
