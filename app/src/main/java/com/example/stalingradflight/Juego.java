@@ -270,7 +270,7 @@ balas();
 
         if (contadorFrames%5 == 0){
             mapaX = 0;
-            mapaY = mapaY + 1;
+            mapaY = mapaY - 1;
         }
 
 
@@ -293,7 +293,7 @@ balas();
 
 
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, 0, -mapaY, null);
+            canvas.drawBitmap(bmpMapa, 0, mapaY, null);
 
 
 
