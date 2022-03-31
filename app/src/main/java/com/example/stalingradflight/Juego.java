@@ -246,6 +246,7 @@ balas();
         }
         if (controles[MUSICA].pulsado){
             if (MainActivity.BANDO==1){
+                reprductor.stop();
                 reprductor = MediaPlayer.create(activity, R.raw.marchlow);
                 reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
@@ -256,6 +257,7 @@ balas();
                 reprductor.start();
             }
             if (MainActivity.BANDO==2){
+                reprductor.stop();
                 reprductor = MediaPlayer.create(activity, R.raw.katilow);
                 reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
