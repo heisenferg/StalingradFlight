@@ -25,7 +25,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private SurfaceHolder holder;
     private BucleJuego bucle;
     private Activity activity;
-    private int x=0,y=1; //Coordenadas x e y para desplazar
+    private int mapaX=0,mapaY=1; //Coordenadas x e y para desplazar
     private int maxX=0;
     private int maxY=0;
     private int contadorFrames=0;
@@ -81,7 +81,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         sonidoAvion();
 
-        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondonube);
+        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.largo);
         bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
 
         //Cargamos mapa
@@ -105,9 +105,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Velocidad:
         velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
-
-        velocidadAvion[x] = maxX/tiempoCrucePantalla;
-        velocidadAvion[y] = 0;
 
 
     }
@@ -160,7 +157,6 @@ public void dimesionesPantalla(){
         yAvion = (maxY / 5*4)-avion.getHeight()/2;
 
 
-         posicionInicialAvion[x] = maxY*1/5 ;
 
 
         destMapaY = (AnchoPantalla-AltoPantalla)/2;
@@ -194,13 +190,6 @@ public void dimesionesPantalla(){
         //Posición avion
         puntero_Avion_sprite = avionW/3 * estadoAvion;
 
-        //Velocidad
-        posicionAvion[x] = posicionAvion[x] + deltaT * velocidadAvion[x];
-        posicionAvion[y] = posicionAvion[y] + deltaT * velocidadAvion[y];
-
-//Gravedad
-        velocidadAvion[x] = 0;
-        velocidadAvion[y] = velocidadAvion[y] + deltaT;
 
 
         estadoAvion++;
@@ -212,12 +201,6 @@ public void dimesionesPantalla(){
             }
         }
 
-        if(salta){
-            // bucle.ejecutandose=false;
-            velocidadAvion[y]=-velocidadAvion[x]*2;
-            gravedad[y]=-velocidadAvion[y]*2;
-            salta = false;
-        }
 
         for (int i=0; i<4; i++){
             if (controles[i].pulsado){
@@ -285,6 +268,14 @@ balas();
         if (misilesDestruidos==40){
             victoria = true;
         }
+
+
+        if (contadorFrames%5 == 0){
+            mapaX = 0;
+            mapaY = mapaY + 1;
+        }
+
+
     }
 
     /**
@@ -302,7 +293,7 @@ balas();
             canvas.drawColor(Color.BLACK);
 
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, 0, 0, null);
+            canvas.drawBitmap(bmpMapa, 0, mapaY, null);
 
             //Dibujar avión
             canvas.drawBitmap(avion, xAvion, yAvion, null);
