@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     private Bitmap bmpMapa;
+    private Bitmap bmpMapa2;
     private Bitmap avion;
     private Bitmap misilEnemigo;
     private SurfaceHolder holder;
@@ -83,7 +85,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.largo);
         mapaH = bmpMapa.getHeight();
         mapaW = bmpMapa.getWidth();
-        bmpMapa.createScaledBitmap(bmpMapa, AltoPantalla, AnchoPantalla, true);
+
+        //Mapa, ancho, alto, filtro
+        bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
+
+        /**
+         * TENGO QUE CAMBIAR EL FONDO, DARLE UN POCO MÁS DE ANCHURA PARA QUE QUEDE BIEN.
+         *
+         */
 
 
         if (MainActivity.BANDO == 1){
@@ -294,8 +303,7 @@ balas();
 
 
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, 0, mapaY, null);
-
+            canvas.drawBitmap(bmpMapa, AnchoPantalla/2-mapaW/2, mapaY, null);
 
 
 
