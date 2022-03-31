@@ -91,7 +91,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         /**
          * TENGO QUE CAMBIAR EL FONDO, DARLE UN POCO MÁS DE ANCHURA PARA QUE QUEDE BIEN.
-         *
+         * IMPLANTAR ENEMOGOS Y CHOQUE
          */
 
 
