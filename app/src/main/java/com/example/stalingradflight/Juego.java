@@ -77,15 +77,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
        // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
-        //No suena a la vez
-
+        //Sonido
         sonidoAvion();
 
         bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.largo);
-        bmpMapa.createScaledBitmap(bmpMapa, AnchoPantalla, AltoPantalla, true);
+        mapaH = bmpMapa.getHeight();
+        mapaW = bmpMapa.getWidth();
+        bmpMapa.createScaledBitmap(bmpMapa, AltoPantalla, AnchoPantalla, true);
 
-        //Cargamos mapa
-       // cargarFondo();
 
         if (MainActivity.BANDO == 1){
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane);
@@ -93,8 +92,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
         }
         Log.d("BANDO: " , " es " + MainActivity.BANDO);
-       // mapaH = bmpMapa.getHeight();
-       // mapaW = bmpMapa.getWidth();
+
 
         deltaT = 1f/BucleJuego.MAX_FPS;
 
@@ -292,8 +290,14 @@ balas();
             //Toda el canvas en negro
             canvas.drawColor(Color.BLACK);
 
+
+
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, 0, mapaY, null);
+            canvas.drawBitmap(bmpMapa, 0, -mapaY, null);
+
+
+
+
 
             //Dibujar avión
             canvas.drawBitmap(avion, xAvion, yAvion, null);
