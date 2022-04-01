@@ -32,7 +32,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int mapaX=0,mapaY=1; //Coordenadas x e y para desplazar
     private int maxX=0;
     private int maxY=0;
-    private int contadorFrames=0;
+    public int contadorFrames=0;
     private boolean hacia_abajo=true;
     private static final String TAG = Juego.class.getSimpleName();
     // private int xMario=0, yMario=0;
@@ -44,10 +44,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int contador_Frames = 0;
     private int yAvion;
     private int xAvion;
-    private float posicionAvion[] = new float[2];
-    private float velocidadAvion[] = new float[2];
-    private float gravedad [] =new float[2];
-    private float posicionInicialAvion[]= new float[2];
+
     private int tiempoCrucePantalla = 3;
     private float deltaT;
     private boolean salta = false;
@@ -58,7 +55,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private final int DERECHA =1;
     private final int DISPARO=2;
     private final int MUSICA=3;
-    private float velocidad;
+    public float velocidad;
     //Fondo
     private Bitmap fondos[] = new Bitmap[2];
     private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
@@ -285,6 +282,7 @@ balas();
             mapaX = 0;
             mapaY = mapaY + 1;
         }
+        nuevoMisil.posicionMisilY();
 
         nuevoMisil.actualizarMisilSprite();
 
