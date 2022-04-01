@@ -82,7 +82,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Sonido
         sonidoAvion();
 
-        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.largo);
+        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondo);
         mapaH = bmpMapa.getHeight();
         mapaW = bmpMapa.getWidth();
 
@@ -280,7 +280,7 @@ balas();
         //Cada dos frames, muevo el mapa 1 px
         if (contadorFrames%2 == 0){
             mapaX = 0;
-            mapaY = mapaY - 1;
+            mapaY = mapaY + 1;
         }
 
 
@@ -303,9 +303,9 @@ balas();
 
 
             //Dibujar mapa
-            canvas.drawBitmap(bmpMapa, AnchoPantalla/2-mapaW/2, mapaY, null);
-
-
+            canvas.drawBitmap(bmpMapa, AnchoPantalla/2-mapaW/2, -mapaH+AltoPantalla+mapaY, null);
+    Log.d("Altura y", " es de " + (-mapaH+mapaY));
+            Log.d("Altura y", " mapaH " + mapaH);
 
 
             //Dibujar avión
