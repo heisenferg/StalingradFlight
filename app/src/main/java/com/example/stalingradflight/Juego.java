@@ -18,6 +18,7 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     private Bitmap bmpMapa;
@@ -61,7 +62,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     //Fondo
     private Bitmap fondos[] = new Bitmap[2];
     private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
-    private int AnchoPantalla,AltoPantalla;
+    public int AnchoPantalla,AltoPantalla;
     private boolean derrota=false;
     private boolean victoria=false;
     private MediaPlayer reprductor;
@@ -110,6 +111,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Velocidad:
         velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
+        //PINTAR UN MISIL DE PRUEBA
+        nuevoMisil();
 
 
     }
@@ -304,7 +307,7 @@ balas();
 
             //Dibujar mapa
             canvas.drawBitmap(bmpMapa, AnchoPantalla/2-mapaW/2, -mapaH+AltoPantalla+mapaY, null);
-    Log.d("Altura y", " es de " + (-mapaH+mapaY));
+            Log.d("Altura y", " es de " + (-mapaH+mapaY));
             Log.d("Altura y", " mapaH " + mapaH);
 
 
@@ -334,18 +337,21 @@ balas();
                 controles[i].Dibujar(canvas, myPaint);
             }
 
-            nuevoMisil();
+
             // Pintar enemigos:
-            nuevoMisil.pintarMisilEnemigo(canvas, myPaint);*/
+            nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
 
 
         }
     }
 
+    public static Random coordenada =  new Random();
+
     public void nuevoMisil(){
-        nuevoMisil = new MisilEnemigo(this,nivel,AnchoPantalla/2);
+        nuevoMisil = new MisilEnemigo(this,nivel);
 
     }
+
 
     public void CargaControles(){
         float aux;
