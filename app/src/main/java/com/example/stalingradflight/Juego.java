@@ -56,9 +56,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private final int DISPARO=2;
     private final int MUSICA=3;
     public float velocidad;
-    //Fondo
-    private Bitmap fondos[] = new Bitmap[2];
-    private int image_fondo[] = {R.drawable.fondonube, R.drawable.fondonube2};
     public int AnchoPantalla,AltoPantalla;
     private boolean derrota=false;
     private boolean victoria=false;
@@ -189,103 +186,101 @@ public void dimesionesPantalla(){
      */
     public void actualizar() {
 
-        //Vector de velocidad
-        // xMario = xMario+mapaW/(bucle.MAX_FPS*3);
+        // Si no hay derrota ni victoria
+        if (derrota == false){
+            contadorFrames++;
+            estadoAvion++;
 
+            //Posición avion
+            puntero_Avion_sprite = avionW/3 * estadoAvion;
 
-        contadorFrames++;
-        //Posición avion
-        puntero_Avion_sprite = avionW/3 * estadoAvion;
-
-
-
-        estadoAvion++;
-
-        if (contadorFrames%3==0){
-
-            if (estadoAvion >3){
-                estadoAvion =1;
-            }
-        }
-
-
-        for (int i=0; i<4; i++){
-            if (controles[i].pulsado){
-                Log.d("Control: ", "Se ha pulsado " + controles[i].nombre);
-            }
-        }
-
-        /**
-         * CONTROLES
-         */
-        if (controles[IZQUIERDA].pulsado){
-            //sonidos = new Virajes(this);
-            //Controlamos que no se salga por la izquierda.
-            if (xAvion >=0) {
-                xAvion = (int) (xAvion - velocidad);
+            if (contadorFrames%3==0){
+                if (estadoAvion >3){
+                    estadoAvion =1;
+                }
             }
 
-        }
-        if (controles[DERECHA].pulsado){
-            //Controlamos que no se salga por la derecha.
-            if (xAvion <maxX-avion.getWidth())
-                xAvion = (int) (xAvion + velocidad);
-        }
-        if (controles[DISPARO].pulsado){
-balas();
-        }
-        if (controles[MUSICA].pulsado){
-            if (MainActivity.BANDO==1){
-                reprductor.stop();
-                reprductor = MediaPlayer.create(activity, R.raw.marchlow);
-                reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mep) {
-                        mep.start();
-                    }
-                });
-                reprductor.start();
+
+            for (int i=0; i<4; i++){
+                if (controles[i].pulsado){
+                    Log.d("Control: ", "Se ha pulsado " + controles[i].nombre);
+                }
             }
-            if (MainActivity.BANDO==2){
-                reprductor.stop();
-                reprductor = MediaPlayer.create(activity, R.raw.katilow);
-                reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mep) {
-                        mep.start();
-                    }
-                });
-                reprductor.start();
+
+            /**
+             * CONTROLES
+             */
+            if (controles[IZQUIERDA].pulsado){
+                //sonidos = new Virajes(this);
+                //Controlamos que no se salga por la izquierda.
+                if (xAvion >=0) {
+                    xAvion = (int) (xAvion - velocidad);
+                }
+
             }
-        }
+            if (controles[DERECHA].pulsado){
+                //Controlamos que no se salga por la derecha.
+                if (xAvion <maxX-avion.getWidth())
+                    xAvion = (int) (xAvion + velocidad);
+            }
+            if (controles[DISPARO].pulsado){
+                balas();
+            }
+            if (controles[MUSICA].pulsado){
+                if (MainActivity.BANDO==1){
+                    reprductor.stop();
+                    reprductor = MediaPlayer.create(activity, R.raw.marchlow);
+                    reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mep) {
+                            mep.start();
+                        }
+                    });
+                    reprductor.start();
+                }
+                if (MainActivity.BANDO==2){
+                    reprductor.stop();
+                    reprductor = MediaPlayer.create(activity, R.raw.katilow);
+                    reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mep) {
+                            mep.start();
+                        }
+                    });
+                    reprductor.start();
+                }
+            }
 
 
-        /**
-         * NIVELES
-         */
-        if (misilesDestruidos>=10){
-            nivel=2;
-        }
-        if (misilesDestruidos>=20){
-            nivel=3;
-        }
-        if (misilesDestruidos>=30){
-            nivel=4;
-        }
-        if (misilesDestruidos==40){
-            victoria = true;
-        }
+            /**
+             * NIVELES
+             */
+            if (misilesDestruidos>=10){
+                nivel=2;
+            }
+            if (misilesDestruidos>=20){
+                nivel=3;
+            }
+            if (misilesDestruidos>=30){
+                nivel=4;
+            }
+            if (misilesDestruidos==40){
+                victoria = true;
+            }
 
 
-        //Cada dos frames, muevo el mapa 1 px
-        if (contadorFrames%2 == 0){
-            mapaX = 0;
-            mapaY = mapaY + 1;
+            //Cada dos frames, muevo el mapa 1 px
+            if (contadorFrames%2 == 0){
+                mapaX = 0;
+                mapaY = mapaY + 1;
+            }
+
+            //Posición del misil
+            nuevoMisil.posicionMisilY();
+            //Actualización del misil
+            nuevoMisil.actualizarMisilSprite();
+
         }
-        nuevoMisil.posicionMisilY();
-
-        nuevoMisil.actualizarMisilSprite();
-
     }
 
     /**
@@ -312,11 +307,6 @@ balas();
 
             //Dibujar avión
             canvas.drawBitmap(avion, xAvion, yAvion, null);
-
-            //Recortar avión
-         /*   canvas.drawBitmap(avion, new Rect(puntero_Avion_sprite,0, puntero_Avion_sprite + (avionW /6), avionH *1/5),
-                    new Rect( (int) posicionAvion[x], yAvion, (int) (avionW /6 ), destMapaY+mapaH*1/2), null);
-*/
 
 
             //Control de frames
@@ -475,7 +465,7 @@ balas();
      * Ejemplo, hay que cambiar
      */
     public void balas(){
-        reprductor = MediaPlayer.create(activity, R.raw.chargeandfire);
+        reprductor = MediaPlayer.create(activity, R.raw.shoot);
         reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
