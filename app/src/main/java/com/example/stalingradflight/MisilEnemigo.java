@@ -38,12 +38,12 @@ public class MisilEnemigo {
                 null);
         Log.d("MISIL: ", " Y Misil: " + coordenadaYMisil +
                 " X misil: " + coordenadaMisil + " velocidad: " + velocidadMisil);
+        // Destruyo misil pintado
+        if(coordenadaMisil>j.AltoPantalla){
+            j.misilEnemigo.recycle();
+        }
 
-   /*     //En coordenadas le pongo entre 1.5 para adecuar
-        canvas.drawBitmap(j.misilEnemigo, new Rect(0,0, j.misilEnemigo.getWidth()/9, j.misilEnemigo.getHeight()),
-                new Rect( coordenadaMisil, 0, coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5)),
-                null);
-*/
+
     }
 
     public int posicionMisilX(){
@@ -53,7 +53,7 @@ public class MisilEnemigo {
 
     public void posicionMisilY(){
         velocidadMisil = j.AltoPantalla/5/bucleJuego.MAX_FPS;
-        velocidadMisil = velocidadMisil *nivel/10;
+        velocidadMisil = velocidadMisil *nivel/5;
         coordenadaYMisil = coordenadaYMisil+velocidadMisil;
     }
 
