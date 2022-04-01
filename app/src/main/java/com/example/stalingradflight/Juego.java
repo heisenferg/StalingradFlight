@@ -23,7 +23,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private Bitmap bmpMapa;
     private Bitmap bmpMapa2;
     private Bitmap avion;
-    private Bitmap misilEnemigo;
+    public Bitmap misilEnemigo;
+
     private SurfaceHolder holder;
     private BucleJuego bucle;
     private Activity activity;
@@ -64,10 +65,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private boolean derrota=false;
     private boolean victoria=false;
     private MediaPlayer reprductor;
+    private MisilEnemigo nuevoMisil;
     private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
-    public Virajes sonidos;
+
 
     public Juego(Activity context) {
         super(context);
@@ -76,7 +78,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         holder.addCallback(this);
         dimesionesPantalla();
         nivel=1;
-       // cargarFondo();
+        pintarEnemigo();
+        // cargarFondo();
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
         //Sonido
@@ -88,11 +91,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         //Mapa, ancho, alto, filtro
         bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
-
-        /**
-         * TENGO QUE CAMBIAR EL FONDO, DARLE UN POCO MÁS DE ANCHURA PARA QUE QUEDE BIEN.
-         * IMPLANTAR ENEMOGOS Y CHOQUE
-         */
 
 
         if (MainActivity.BANDO == 1){
@@ -119,7 +117,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
     public void pintarEnemigo(){
-        //misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
+        misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
+        misilEnemigo.createScaledBitmap(misilEnemigo, 70, 110, true);
     }
 
 
@@ -177,6 +176,7 @@ public void dimesionesPantalla(){
         setFocusable(true);
 
         CargaControles();
+
 
         //comenzar el bucle
         bucle.start();
@@ -333,7 +333,18 @@ balas();
             for (int i = 0; i<4; i++){
                 controles[i].Dibujar(canvas, myPaint);
             }
+
+            nuevoMisil();
+            // Pintar enemigos:
+            nuevoMisil.pintarMisilEnemigo(canvas, myPaint);*/
+
+
         }
+    }
+
+    public void nuevoMisil(){
+        nuevoMisil = new MisilEnemigo(this,nivel,AnchoPantalla/2);
+
     }
 
     public void CargaControles(){
