@@ -286,6 +286,7 @@ balas();
             mapaY = mapaY + 1;
         }
 
+        nuevoMisil.actualizarMisilSprite();
 
     }
 
