@@ -187,7 +187,7 @@ public void dimesionesPantalla(){
     public void actualizar() {
 
         // Si no hay derrota ni victoria
-        if (derrota == false){
+        if (derrota == false || victoria==false){
             contadorFrames++;
             estadoAvion++;
 
@@ -469,7 +469,7 @@ public void dimesionesPantalla(){
         reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mp.stop();
+                mp.pause();
             }
         });
         reprductor.start();
