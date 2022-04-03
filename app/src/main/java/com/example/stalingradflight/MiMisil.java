@@ -25,7 +25,7 @@ public class MiMisil {
         // Coordenada X se pinta donde esté el avión más dimesión del avión/2 para disparar desde el centro
         coordenadaMisil = coordenadaX + j.avion.getWidth()/2;
         // Coordenada Y en posicion avión menos la altura del avión
-        coordenadaYMisil = coordenadaY-j.avion.getHeight();
+        coordenadaYMisil = coordenadaY-j.avion.getHeight()/2;
 
         //Sonido disparo
         sonidoDisparo = MediaPlayer.create(j.getContext(), R.raw.shoot);
@@ -56,8 +56,9 @@ public class MiMisil {
         velocidadMisil = j.AltoPantalla/5/bucleJuego.MAX_FPS;
         velocidadMisil = velocidadMisil *nivel/5;
         //Vamos restando para que suba por la pantalla
-        coordenadaYMisil = coordenadaYMisil-velocidadMisil;
+        coordenadaYMisil = coordenadaYMisil+velocidadMisil;
     }
+
 
     public void actualizarMiMisilSprite(){
         if (j.contadorFrames%3==0) {

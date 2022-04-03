@@ -243,11 +243,10 @@ public void dimesionesPantalla(){
                 ponerMisilMioNuevo();
                 //misMisiles.posicionMiMisilY();
                 //misMisiles.actualizarMiMisilSprite();
-                balas();
+                //balas();
             }
             if (controles[MUSICA].pulsado){
                 if (MainActivity.BANDO==1){
-                    reprductor.stop();
                     reprductor = MediaPlayer.create(activity, R.raw.marchlow);
                     reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -258,7 +257,6 @@ public void dimesionesPantalla(){
                     reprductor.start();
                 }
                 if (MainActivity.BANDO==2){
-                    reprductor.stop();
                     reprductor = MediaPlayer.create(activity, R.raw.katilow);
                     reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
