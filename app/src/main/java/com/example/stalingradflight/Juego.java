@@ -66,6 +66,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int nivel;
     private int misilesDestruidos=0;
     private MiMisil misMisiles;
+    public static Random coordenada =  new Random();
+
 
 
     public Juego(Activity context) {
@@ -236,8 +238,6 @@ public void dimesionesPantalla(){
             }
             if (controles[DISPARO].pulsado){
                 balas();
-                ponerEnemigoNuevo();
-
             }
             if (controles[MUSICA].pulsado){
                 if (MainActivity.BANDO==1){
@@ -290,8 +290,13 @@ public void dimesionesPantalla(){
 
 
 
+            int tiempoAleatorioMisilEnemigo = coordenada.nextInt(1000)+1;
+            //Cada X frames aleatorios, pinto un misil
+            if (contadorFrames%tiempoAleatorioMisilEnemigo==0){
+                ponerEnemigoNuevo();
 
-            //Posición del misil
+            }
+            //Posición del misil por cada misil enemigo
             for(MisilEnemigo e: misilesEnemigos){
                 e.posicionMisilY();
                 //Actualización del misil
@@ -373,7 +378,6 @@ public void dimesionesPantalla(){
         }
     }
 
-    public static Random coordenada =  new Random();
 
 
 
