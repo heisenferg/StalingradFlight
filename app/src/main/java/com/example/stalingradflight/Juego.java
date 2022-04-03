@@ -247,24 +247,24 @@ public void dimesionesPantalla(){
             }
             if (controles[MUSICA].pulsado){
                 if (MainActivity.BANDO==1){
-                    reprductor = MediaPlayer.create(activity, R.raw.marchlow);
-                    reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    musica = MediaPlayer.create(activity, R.raw.marchlow);
+                    musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mep) {
                             mep.start();
                         }
                     });
-                    reprductor.start();
+                    musica.start();
                 }
                 if (MainActivity.BANDO==2){
-                    reprductor = MediaPlayer.create(activity, R.raw.katilow);
-                    reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    musica = MediaPlayer.create(activity, R.raw.katilow);
+                    musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mep) {
                             mep.start();
                         }
                     });
-                    reprductor.start();
+                    musica.start();
                 }
             }
 
