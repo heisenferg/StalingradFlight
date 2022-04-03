@@ -56,7 +56,7 @@ public class MiMisil {
         velocidadMisil = j.AltoPantalla/5/bucleJuego.MAX_FPS;
         velocidadMisil = velocidadMisil *nivel/5;
         //Vamos restando para que suba por la pantalla
-        coordenadaYMisil = coordenadaYMisil+velocidadMisil;
+        coordenadaYMisil = coordenadaYMisil-velocidadMisil;
     }
 
 
