@@ -62,6 +62,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private MediaPlayer reprductor;
     private MisilEnemigo nuevoMisil;
     private ArrayList<MisilEnemigo> misilesEnemigos = new ArrayList<MisilEnemigo>();
+    private ArrayList<MiMisil> miMisilDisparado = new ArrayList<MiMisil>();
     private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
@@ -81,6 +82,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         pintarEnemigo();
         cargarMiMisil();
+
 
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
@@ -115,8 +117,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //PINTAR UN MISIL DE PRUEBA
        // nuevoMisil();
 
-        //PRUEBA MI MISIL
-       // misMisiles = new MiMisil(this, );
+
 
 
 
@@ -237,6 +238,11 @@ public void dimesionesPantalla(){
                     xAvion = (int) (xAvion + velocidad);
             }
             if (controles[DISPARO].pulsado){
+                //PRUEBA MI MISIL
+
+                ponerMisilMioNuevo();
+                //misMisiles.posicionMiMisilY();
+                //misMisiles.actualizarMiMisilSprite();
                 balas();
             }
             if (controles[MUSICA].pulsado){
@@ -304,22 +310,35 @@ public void dimesionesPantalla(){
             }
 
 
-
+            //Posición de mi misil por cada misil
+            for(MiMisil mi: miMisilDisparado){
+                mi.posicionMiMisilY();
+                //Actualización del misil
+                mi.actualizarMiMisilSprite();
+            }
 
 
         }
     }
 
-    private void ponerEnemigoNuevo() {
-        nuevoMisil();
-        misilesEnemigos.add(nuevoMisil);
 
 
-    }
-
+    //Lo mantengo en dos métodos, para pruebas
     public void nuevoMisil(){
         nuevoMisil = new MisilEnemigo(this,nivel);
     }
+
+    private void ponerEnemigoNuevo() {
+        nuevoMisil();
+        misilesEnemigos.add(nuevoMisil);
+    }
+
+    private void ponerMisilMioNuevo(){
+        misMisiles = new MiMisil(this,xAvion,yAvion);
+        miMisilDisparado.add(misMisiles);
+    }
+
+
 
     /**
      * Este método dibuja el siguiente paso de la animación correspondiente
@@ -372,7 +391,10 @@ public void dimesionesPantalla(){
                 e.pintarMisilEnemigo(canvas,myPaint);
             }
 
-
+            for (MiMisil mi : miMisilDisparado){
+                mi.pintarMiMisil(canvas, myPaint);
+            }
+           // misMisiles.pintarMiMisil(canvas, myPaint);
 
 
         }

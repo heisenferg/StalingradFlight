@@ -44,8 +44,8 @@ public class MiMisil {
         canvas.drawBitmap(j.miMisil, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
                 new Rect((int) coordenadaMisil, (int) coordenadaYMisil, (int) coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)),
                 null);
-        Log.d("MISIL: ", " Y Misil: " + coordenadaYMisil +
-                " X misil: " + coordenadaMisil + " velocidad: " + velocidadMisil);
+        Log.d("MISIL: ", " Y Mi Misil: " + coordenadaYMisil +
+                " X mi  misil: " + coordenadaMisil + " velocidad mi misil: " + velocidadMisil);
 
 
 
