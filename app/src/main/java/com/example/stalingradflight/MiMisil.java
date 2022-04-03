@@ -2,9 +2,11 @@ package com.example.stalingradflight;
 
 import static com.example.stalingradflight.Juego.coordenada;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.util.Log;
 
 public class MiMisil {
@@ -13,24 +15,34 @@ public class MiMisil {
     private Juego j;
     public float puntero_misil=0;
     public int estadoMisil=0;
-    public int coordenadaMisil;
+    public float coordenadaMisil;
     public float coordenadaYMisil=0;
+    public MediaPlayer sonidoDisparo;
     private BucleJuego bucleJuego;
 
-    public MiMisil(Juego juego, int Nivel){
+    public MiMisil(Juego juego, float coordenadaX, float coordenadaY){
         j = juego;
-        nivel = Nivel;
-        nivel = 1;
-        posicionMisilX();
+        // Coordenada X se pinta donde esté el avión más dimesión del avión/2 para disparar desde el centro
+        coordenadaMisil = coordenadaX + j.avion.getWidth()/2;
+        // Coordenada Y en posicion avión menos la altura del avión
+        coordenadaYMisil = coordenadaY-j.avion.getHeight();
+
+        //Sonido disparo
+        sonidoDisparo = MediaPlayer.create(j.getContext(), R.raw.shoot);
+        sonidoDisparo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        sonidoDisparo.start();
     }
 
     public void pintarMiMisil(Canvas canvas, Paint paint){
-        // canvas.drawBitmap(j.misilEnemigo, coordenadaMisil, 0, paint);
 
-        //Recortar misil
         //En coordenadas le pongo entre 1.5 para adecuar
-        canvas.drawBitmap(j.misilEnemigo, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
-                new Rect(coordenadaMisil, (int) coordenadaYMisil, coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)),
+        canvas.drawBitmap(j.miMisil, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
+                new Rect((int) coordenadaMisil, (int) coordenadaYMisil, (int) coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)),
                 null);
         Log.d("MISIL: ", " Y Misil: " + coordenadaYMisil +
                 " X misil: " + coordenadaMisil + " velocidad: " + velocidadMisil);
@@ -39,25 +51,24 @@ public class MiMisil {
 
     }
 
-    public int posicionMisilX(){
-        coordenadaMisil = coordenada.nextInt(j.AnchoPantalla);
-        return coordenadaMisil;
-    }
 
     public void posicionMiMisilY(){
         velocidadMisil = j.AltoPantalla/5/bucleJuego.MAX_FPS;
         velocidadMisil = velocidadMisil *nivel/5;
-        coordenadaYMisil = coordenadaYMisil+velocidadMisil;
+        //Vamos restando para que suba por la pantalla
+        coordenadaYMisil = coordenadaYMisil-velocidadMisil;
     }
 
     public void actualizarMiMisilSprite(){
         if (j.contadorFrames%3==0) {
-            puntero_misil = j.misilEnemigo.getWidth() / 9 * estadoMisil;
+            puntero_misil = j.miMisil.getWidth() / 9 * estadoMisil;
             estadoMisil++;
             if (estadoMisil > 8) {
                 estadoMisil = 0;
             }
         }
     }
+
+
 
 }

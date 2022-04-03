@@ -22,9 +22,9 @@ import java.util.Random;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     private Bitmap bmpMapa;
-    private Bitmap bmpMapa2;
-    private Bitmap avion;
+    public Bitmap avion;
     public Bitmap misilEnemigo;
+    public Bitmap miMisil;
 
     private SurfaceHolder holder;
     private BucleJuego bucle;
@@ -61,9 +61,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private boolean victoria=false;
     private MediaPlayer reprductor;
     private MisilEnemigo nuevoMisil;
+    private ArrayList<MisilEnemigo> misilesEnemigos = new ArrayList<MisilEnemigo>();
     private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
+    private MiMisil misMisiles;
 
 
     public Juego(Activity context) {
@@ -73,8 +75,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         holder.addCallback(this);
         dimesionesPantalla();
         nivel=1;
+
+
         pintarEnemigo();
-        // cargarFondo();
+        cargarMiMisil();
+
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
         //Sonido
@@ -106,7 +111,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
         //PINTAR UN MISIL DE PRUEBA
-        nuevoMisil();
+       // nuevoMisil();
+
+        //PRUEBA MI MISIL
+       // misMisiles = new MiMisil(this, );
+
+
 
 
     }
@@ -175,6 +185,7 @@ public void dimesionesPantalla(){
         CargaControles();
 
 
+
         //comenzar el bucle
         bucle.start();
 
@@ -225,6 +236,8 @@ public void dimesionesPantalla(){
             }
             if (controles[DISPARO].pulsado){
                 balas();
+                ponerEnemigoNuevo();
+
             }
             if (controles[MUSICA].pulsado){
                 if (MainActivity.BANDO==1){
@@ -275,12 +288,32 @@ public void dimesionesPantalla(){
                 mapaY = mapaY + 1;
             }
 
+
+
+
             //Posición del misil
-            nuevoMisil.posicionMisilY();
-            //Actualización del misil
-            nuevoMisil.actualizarMisilSprite();
+            for(MisilEnemigo e: misilesEnemigos){
+                e.posicionMisilY();
+                //Actualización del misil
+                e.actualizarMisilSprite();
+            }
+
+
+
+
 
         }
+    }
+
+    private void ponerEnemigoNuevo() {
+        nuevoMisil();
+        misilesEnemigos.add(nuevoMisil);
+
+
+    }
+
+    public void nuevoMisil(){
+        nuevoMisil = new MisilEnemigo(this,nivel);
     }
 
     /**
@@ -328,7 +361,13 @@ public void dimesionesPantalla(){
 
 
             // Pintar enemigos:
-            nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
+          //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
+
+            for(MisilEnemigo e: misilesEnemigos){
+                e.pintarMisilEnemigo(canvas,myPaint);
+            }
+
+
 
 
         }
@@ -336,9 +375,19 @@ public void dimesionesPantalla(){
 
     public static Random coordenada =  new Random();
 
-    public void nuevoMisil(){
-        nuevoMisil = new MisilEnemigo(this,nivel);
 
+
+    public void cargarMiMisil(){
+        if (MainActivity.BANDO ==1){
+            //Misil nazi cargardo
+            miMisil = BitmapFactory.decodeResource(getResources(), R.drawable.mimisilnazi);
+
+        }
+        if (MainActivity.BANDO ==2){
+            //Misil comunista cargado
+            miMisil = BitmapFactory.decodeResource(getResources(), R.drawable.mimisilsovietico);
+        }
+        miMisil.createScaledBitmap(miMisil, 70, 110, true);
     }
 
 
@@ -440,23 +489,23 @@ public void dimesionesPantalla(){
 
     public void sonidoAvion(){
         if (MainActivity.BANDO==1){
-            reprductor = MediaPlayer.create(activity, R.raw.aircraftengine);
-            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            musica = MediaPlayer.create(activity, R.raw.aircraftengine);
+            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mep) {
                     mep.start();
                 }
             });
-            reprductor.start();
+            musica.start();
         } else if (MainActivity.BANDO==2) {
-            reprductor = MediaPlayer.create(activity, R.raw.comunistengine);
-            reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            musica = MediaPlayer.create(activity, R.raw.comunistengine);
+            musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mep) {
                     mep.start();
                 }
             });
-            reprductor.start();
+            musica.start();
         }
     }
 
@@ -469,7 +518,7 @@ public void dimesionesPantalla(){
         reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mp.pause();
+                mp.release();
             }
         });
         reprductor.start();

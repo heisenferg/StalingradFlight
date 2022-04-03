@@ -40,7 +40,7 @@ public class MisilEnemigo {
                 " X misil: " + coordenadaMisil + " velocidad: " + velocidadMisil);
         // Destruyo misil pintado
         if(coordenadaMisil>j.AltoPantalla){
-            j.misilEnemigo.recycle();
+          //  j.misilEnemigo.recycle();
         }
 
 
