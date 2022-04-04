@@ -337,19 +337,20 @@ public void dimesionesPantalla(){
             }
 
 
-            explosiones.movimientoSpriteExplosion();
+           // explosiones.movimientoSpriteExplosion();
 
 
-            /*
 
-            for (MiMisil misil: miMisilDisparado){
-                if (explosiones.hayChoque(this,misil.getCoordenadaMisil(), misil.getCoordenadaYMisil()) ==true){
+
+            for (Choques miexplosion: choquesArrayList){
+                if (miexplosion.hayChoque(this,misMisiles.getCoordenadaMisil(), misMisiles.getCoordenadaYMisil()) ==true){
                         explotarMisil();
                 }
                 explosiones.movimientoSpriteExplosion();
 
-            }*/
+            }
 
+            Log.d("Coordenadas de mis misiles", " X: " + misMisiles.getCoordenadaMisil() + " Y " + misMisiles.coordenadaYMisil);
 
 
 
@@ -438,15 +439,19 @@ public void dimesionesPantalla(){
             //PRUEBAS
            // misMisiles.pintarMiMisil(canvas, myPaint);
             //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
-/*
-            for (MiMisil misil: miMisilDisparado){
+
+         /*   for (MiMisil misil: miMisilDisparado){
                 if (explosiones.hayChoque(this,misil.getCoordenadaMisil(), misil.getCoordenadaYMisil()) ==true){
                     explosiones.dibujarExplosion(canvas,myPaint);
 
                 }
 
+            }*/
+            for (Choques miexplosion: choquesArrayList){
+                        miexplosion.dibujarExplosion(canvas,myPaint);
+
             }
-*/                    explosiones.dibujarExplosion(canvas,myPaint);
+                  // explosiones.dibujarExplosion(canvas,myPaint);
 
         }
     }
