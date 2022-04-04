@@ -326,6 +326,9 @@ public void dimesionesPantalla(){
                 e.posicionMisilY();
                 //Actualización del misil
                 e.actualizarMisilSprite();
+           /*     if (e.coordenadaYMisil>AltoPantalla){
+                    misilesEnemigos.remove(e);
+                }*/
             }
 
 
@@ -334,6 +337,11 @@ public void dimesionesPantalla(){
                 mi.posicionMiMisilY();
                 //Actualización del misil
                 mi.actualizarMiMisilSprite();
+
+/*
+                if (mi.coordenadaYMisil==0){
+                    misilesEnemigos.remove(mi);
+                }*/
             }
 
 
@@ -342,15 +350,23 @@ public void dimesionesPantalla(){
 
 
 
-            for (Choques miexplosion: choquesArrayList){
-                if (miexplosion.hayChoque(this,misMisiles.getCoordenadaMisil(), misMisiles.getCoordenadaYMisil()) ==true){
+            for (MiMisil miMisil: miMisilDisparado){
+                for (MisilEnemigo misilEnemigo: misilesEnemigos){
+                    if (miMisil.coordenadaMisil == misilEnemigo.coordenadaMisil && miMisil.coordenadaYMisil == misilEnemigo.coordenadaYMisil){
                         explotarMisil();
+
+                    }
+                    Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
+                    Log.d("Coordenadas de misiles enemigo", " X enemigo: " + misilEnemigo.coordenadaMisil + " Y enemigo: " + misilEnemigo.coordenadaYMisil);
+
+
+
                 }
-                explosiones.movimientoSpriteExplosion();
+
 
             }
 
-            Log.d("Coordenadas de mis misiles", " X: " + misMisiles.getCoordenadaMisil() + " Y " + misMisiles.coordenadaYMisil);
+            explosiones.movimientoSpriteExplosion();
 
 
 
@@ -433,6 +449,10 @@ public void dimesionesPantalla(){
             //Pintar mis misiles
             for (MiMisil mi : miMisilDisparado){
                 mi.pintarMiMisil(canvas, myPaint);
+                // Cuando desaparezca por arriba, se borra
+              /*  if (mi.coordenadaYMisil==0){
+
+                }*/
             }
 
 
