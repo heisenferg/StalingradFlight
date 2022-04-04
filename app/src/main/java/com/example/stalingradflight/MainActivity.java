@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
@@ -15,9 +16,10 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
     public static int BANDO;
-    ImageView naziButton, sovietButton, cab;
+    ImageView naziButton, sovietButton, cab, textoNaxi, textoComunista;
     private MediaPlayer reproductor;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,12 +29,17 @@ public class MainActivity extends AppCompatActivity {
         cab = findViewById(R.id.bando);
         naziButton = findViewById(R.id.naziButton);
         sovietButton = findViewById(R.id.sovietButton);
+        textoComunista = findViewById(R.id.urss);
+        textoNaxi = findViewById(R.id.alemania);
+        textoNaxi.setVisibility(View.INVISIBLE);
+        textoComunista.setVisibility(View.INVISIBLE);
         animarBandos();
         sonidos();
         naziButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BANDO = 1;
+                mostarBando();
                 balas();
                 Intent i = new Intent(MainActivity.this, LanzadorJuego.class);
                 startActivity(i);
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 BANDO = 2;
+                mostarBando();
                 balas();
                 Intent i = new Intent(MainActivity.this, LanzadorJuego.class);
                 startActivity(i);
@@ -88,6 +96,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         reproductor.start();
+    }
+
+    public void mostarBando(){
+        AnimatorSet animador = new AnimatorSet();
+        if(BANDO==1){
+            textoNaxi.setVisibility(View.VISIBLE);
+           ObjectAnimator fadeIn = ObjectAnimator.ofFloat(textoNaxi, "alpha",0f, 1f);
+            fadeIn.setDuration(100);
+            //Play y start animación
+            animador.play(fadeIn);
+        } else if (BANDO==2) {
+            textoComunista.setVisibility(View.VISIBLE);
+            ObjectAnimator fadeIn = ObjectAnimator.ofFloat(textoComunista, "alpha",0f, 1f);
+            fadeIn.setDuration(100);
+            //Play y start animación
+            animador.play(fadeIn);
+        }
+
+        animador.start();
     }
 
 }

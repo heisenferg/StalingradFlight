@@ -22,10 +22,11 @@
         android:id="@+id/bando"
         android:layout_width="391dp"
         android:layout_height="118dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054"
         app:srcCompat="@drawable/bando" />
 
     <ImageView
@@ -51,4 +52,24 @@
         app:layout_constraintTop_toTopOf="@+id/naziButton"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/comunismmap" />
+
+    <ImageView
+        android:id="@+id/alemania"
+        android:layout_width="132dp"
+        android:layout_height="132dp"
+        app:layout_constraintBottom_toBottomOf="@+id/naziButton"
+        app:layout_constraintEnd_toEndOf="@+id/naziButton"
+        app:layout_constraintStart_toStartOf="@+id/naziButton"
+        app:layout_constraintTop_toTopOf="@+id/naziButton"
+        app:srcCompat="@drawable/alemania" />
+
+    <ImageView
+        android:id="@+id/urss"
+        android:layout_width="176dp"
+        android:layout_height="158dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sovietButton"
+        app:layout_constraintEnd_toEndOf="@+id/sovietButton"
+        app:layout_constraintStart_toStartOf="@+id/sovietButton"
+        app:layout_constraintTop_toTopOf="@+id/sovietButton"
+        app:srcCompat="@drawable/urss" />
 </androidx.constraintlayout.widget.ConstraintLayout>
