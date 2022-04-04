@@ -16,7 +16,7 @@ public class MiMisil {
     public float puntero_misil=0;
     public int estadoMisil=0;
     public int coordenadaMisil;
-    public int coordenadaYMisil=0;
+    public float coordenadaYMisil=0;
     public MediaPlayer sonidoDisparo;
     private BucleJuego bucleJuego;
 
@@ -29,7 +29,7 @@ public class MiMisil {
         this.coordenadaMisil = coordenadaMisil;
     }
 
-    public int getCoordenadaYMisil() {
+    public float getCoordenadaYMisil() {
         return coordenadaYMisil;
     }
 

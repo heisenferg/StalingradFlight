@@ -359,8 +359,6 @@ public void dimesionesPantalla(){
                     Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
                     Log.d("Coordenadas de misiles enemigo", " X enemigo: " + misilEnemigo.coordenadaMisil + " Y enemigo: " + misilEnemigo.coordenadaYMisil);
 
-
-
                 }
 
 
