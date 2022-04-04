@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
@@ -25,6 +24,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap avion;
     public Bitmap misilEnemigo;
     public Bitmap miMisil;
+    public Bitmap explosion;
 
     private SurfaceHolder holder;
     private BucleJuego bucle;
@@ -69,6 +69,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private MiMisil misMisiles;
     public static Random coordenada =  new Random();
     private Musica musicaFondo;
+    private Choques explosiones;
 
 
 
@@ -83,6 +84,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         pintarEnemigo();
         cargarMiMisil();
+        cargarExplosiones();
 
 
         Display mdisp = context.getWindowManager().getDefaultDisplay();
@@ -99,7 +101,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
         if (MainActivity.BANDO == 1){
-            avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane);
+            avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane2);
         } else {
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
         }
@@ -115,9 +117,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Velocidad:
         velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
-        //PINTAR UN MISIL DE PRUEBA
+
+
+        // PRUEBAS
        // nuevoMisil();
 
+        explosiones = new Choques(this,500,400);
 
 
 
@@ -130,6 +135,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public void pintarEnemigo(){
         misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
         misilEnemigo.createScaledBitmap(misilEnemigo, 70, 110, true);
+    }
+
+    public void cargarExplosiones(){
+        if (MainActivity.BANDO==1){
+            explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosionnazi);
+            explosion.createScaledBitmap(explosion, 70, 110, false);
+        }
+        if (MainActivity.BANDO==2) {
+            explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosionsovietica);
+            explosion.createScaledBitmap(explosion, 70, 110, false);
+        }
     }
 
 
@@ -317,6 +333,8 @@ public void dimesionesPantalla(){
                 mi.actualizarMiMisilSprite();
             }
 
+            explosiones.movimientoSpriteExplosion();
+
 
         }
     }
@@ -384,8 +402,6 @@ public void dimesionesPantalla(){
             }
 
 
-            // Pintar enemigos:
-          //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
 
             for(MisilEnemigo e: misilesEnemigos){
                 e.pintarMisilEnemigo(canvas,myPaint);
@@ -395,8 +411,12 @@ public void dimesionesPantalla(){
             for (MiMisil mi : miMisilDisparado){
                 mi.pintarMiMisil(canvas, myPaint);
             }
-           // misMisiles.pintarMiMisil(canvas, myPaint);
 
+
+            //PRUEBAS
+           // misMisiles.pintarMiMisil(canvas, myPaint);
+            //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
+            explosiones.dibujarExplosion(canvas,myPaint);
 
         }
     }
