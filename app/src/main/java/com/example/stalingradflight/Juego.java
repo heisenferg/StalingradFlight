@@ -68,6 +68,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int misilesDestruidos=0;
     private MiMisil misMisiles;
     public static Random coordenada =  new Random();
+    private Musica musicaFondo;
 
 
 
@@ -246,7 +247,7 @@ public void dimesionesPantalla(){
                 //balas();
             }
             if (controles[MUSICA].pulsado){
-                if (MainActivity.BANDO==1){
+               /* if (MainActivity.BANDO==1){
                     musica = MediaPlayer.create(activity, R.raw.marchlow);
                     musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -265,7 +266,8 @@ public void dimesionesPantalla(){
                         }
                     });
                     musica.start();
-                }
+                }*/
+                musicaFondo = new Musica(this);
             }
 
 
@@ -389,6 +391,7 @@ public void dimesionesPantalla(){
                 e.pintarMisilEnemigo(canvas,myPaint);
             }
 
+            //Pintar mis misiles
             for (MiMisil mi : miMisilDisparado){
                 mi.pintarMiMisil(canvas, myPaint);
             }

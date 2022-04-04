@@ -15,18 +15,19 @@ public class MiMisil {
     private Juego j;
     public float puntero_misil=0;
     public int estadoMisil=0;
-    public float coordenadaMisil;
+    public int coordenadaMisil;
     public float coordenadaYMisil=0;
     public MediaPlayer sonidoDisparo;
     private BucleJuego bucleJuego;
 
     public MiMisil(Juego juego, float coordenadaX, float coordenadaY){
         j = juego;
+        nivel = 1;
         // Coordenada X se pinta donde esté el avión más dimesión del avión/2 para disparar desde el centro
-        coordenadaMisil = coordenadaX + j.avion.getWidth()/2;
+        coordenadaMisil = (int) (coordenadaX + j.avion.getWidth()/2);
         // Coordenada Y en posicion avión menos la altura del avión
-        coordenadaYMisil = coordenadaY-j.avion.getHeight()/2;
-
+      //  coordenadaYMisil = coordenadaY-j.avion.getHeight()/2;
+        coordenadaYMisil = coordenadaY + j.avion.getHeight();
         //Sonido disparo
         sonidoDisparo = MediaPlayer.create(j.getContext(), R.raw.shoot);
         sonidoDisparo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -42,7 +43,7 @@ public class MiMisil {
 
         //En coordenadas le pongo entre 1.5 para adecuar
         canvas.drawBitmap(j.miMisil, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
-                new Rect((int) coordenadaMisil, (int) coordenadaYMisil, (int) coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)),
+                new Rect(coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
                 null);
         Log.d("MISIL: ", " Y Mi Misil: " + coordenadaYMisil +
                 " X mi  misil: " + coordenadaMisil + " velocidad mi misil: " + velocidadMisil);
