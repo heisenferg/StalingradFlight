@@ -15,6 +15,7 @@ public class Choques {
     public MediaPlayer sonidoExplosion;
     private BucleJuego bucleJuego;
     public int estadoExplosion;
+    private MisilEnemigo misilEnemigo;
 
 
     public Choques(Juego j, int coordenadaXExplosionl, float coordenadaYExplosion) {
@@ -45,14 +46,23 @@ public class Choques {
 
     }
 
+    public boolean hayChoque=false;
+
+    public boolean hayChoque(Juego j, int coordenadaX, int coordenadaY){
+        if(coordenadaX == misilEnemigo.posicionMisilX() && coordenadaY == misilEnemigo.getCoordenadaYMisil()){
+            hayChoque=true;
+        }
+        return hayChoque;
+    }
+
 
 
     public void movimientoSpriteExplosion(){
         if (j.contadorFrames%6==0) {
             puntero_explosion = j.explosion.getWidth() / 9 * estadoExplosion;
             estadoExplosion++;
-          /*  if (estadoExplosion > 8) {
-                estadoExplosion = 0;
+           /* if (estadoExplosion > 8) {
+                j.explosion.recycle();
             }*/
         }
     }

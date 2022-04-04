@@ -70,6 +70,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public static Random coordenada =  new Random();
     private Musica musicaFondo;
     private Choques explosiones;
+    private ArrayList<Choques> choquesArrayList = new ArrayList<Choques>();
 
 
 
@@ -122,13 +123,15 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         // PRUEBAS
        // nuevoMisil();
 
-        explosiones = new Choques(this,500,400);
 
+        explosiones = new Choques(this,400,500);
 
 
 
 
     }
+
+
 
 
 
@@ -333,7 +336,21 @@ public void dimesionesPantalla(){
                 mi.actualizarMiMisilSprite();
             }
 
+
             explosiones.movimientoSpriteExplosion();
+
+
+            /*
+
+            for (MiMisil misil: miMisilDisparado){
+                if (explosiones.hayChoque(this,misil.getCoordenadaMisil(), misil.getCoordenadaYMisil()) ==true){
+                        explotarMisil();
+                }
+                explosiones.movimientoSpriteExplosion();
+
+            }*/
+
+
 
 
         }
@@ -354,6 +371,11 @@ public void dimesionesPantalla(){
     private void ponerMisilMioNuevo(){
         misMisiles = new MiMisil(this,xAvion,yAvion);
         miMisilDisparado.add(misMisiles);
+    }
+
+    private void explotarMisil(){
+        explosiones = new Choques(this, nuevoMisil.getCoordenadaMisil(), nuevoMisil.getCoordenadaYMisil());
+        choquesArrayList.add(explosiones);
     }
 
 
@@ -416,7 +438,15 @@ public void dimesionesPantalla(){
             //PRUEBAS
            // misMisiles.pintarMiMisil(canvas, myPaint);
             //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
-            explosiones.dibujarExplosion(canvas,myPaint);
+/*
+            for (MiMisil misil: miMisilDisparado){
+                if (explosiones.hayChoque(this,misil.getCoordenadaMisil(), misil.getCoordenadaYMisil()) ==true){
+                    explosiones.dibujarExplosion(canvas,myPaint);
+
+                }
+
+            }
+*/                    explosiones.dibujarExplosion(canvas,myPaint);
 
         }
     }

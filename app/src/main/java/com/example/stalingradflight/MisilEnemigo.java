@@ -19,6 +19,14 @@ public class MisilEnemigo {
     public float coordenadaYMisil=0;
     private BucleJuego bucleJuego;
 
+    public int getCoordenadaMisil() {
+        return coordenadaMisil;
+    }
+
+    public float getCoordenadaYMisil() {
+        return coordenadaYMisil;
+    }
+
     //Constructor
     public MisilEnemigo(Juego juego, int Nivel){
         j = juego;
@@ -32,7 +40,7 @@ public class MisilEnemigo {
        // canvas.drawBitmap(j.misilEnemigo, coordenadaMisil, 0, paint);
 
         //Recortar misil
-        //En coordenadas le pongo entre 1.5 para adecuar el misil
+        //En coordenadas le pongo entre 1.5 para adecuar
         canvas.drawBitmap(j.misilEnemigo, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
                     new Rect(coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
                 null);
