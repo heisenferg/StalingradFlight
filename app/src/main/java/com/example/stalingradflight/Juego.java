@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
@@ -71,7 +72,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private Musica musicaFondo;
     private Choques explosiones;
     private ArrayList<Choques> choquesArrayList = new ArrayList<Choques>();
-
+    public Iterator<MisilEnemigo> iteradorMisiles;
 
 
     public Juego(Activity context) {
@@ -124,7 +125,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
        // nuevoMisil();
 
 
-        explosiones = new Choques(this,400,500);
+        //explosiones = new Choques(this,400,500);
+        iteradorMisiles = misilesEnemigos.iterator();
 
 
 
@@ -351,7 +353,7 @@ public void dimesionesPantalla(){
 
 
             for (MiMisil miMisil: miMisilDisparado){
-                for (MisilEnemigo misilEnemigo: misilesEnemigos){
+               /* for (MisilEnemigo misilEnemigo: misilesEnemigos){
                     if (miMisil.coordenadaMisil == misilEnemigo.coordenadaMisil && miMisil.coordenadaYMisil == misilEnemigo.coordenadaYMisil){
                         explotarMisil();
 
@@ -359,8 +361,15 @@ public void dimesionesPantalla(){
                     Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
                     Log.d("Coordenadas de misiles enemigo", " X enemigo: " + misilEnemigo.coordenadaMisil + " Y enemigo: " + misilEnemigo.coordenadaYMisil);
 
-                }
+                }*/
+                while (iteradorMisiles.hasNext()){
+                    if (miMisil.coordenadaMisil == explosiones.coordenadaXExplosionl && miMisil.coordenadaYMisil == explosiones.coordenadaYExplosion){
+                        explotarMisil();
 
+                    }
+                    Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
+                    Log.d("Coordenadas de misiles enemigo", " X enemigo: " + explosiones.coordenadaXExplosionl + " Y enemigo: " + explosiones.coordenadaYExplosion);
+                }
 
             }
 
