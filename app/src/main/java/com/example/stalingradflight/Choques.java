@@ -60,11 +60,10 @@ public boolean finalizado(){
         return estadoExplosion>=9;
 }
     public void movimientoSpriteExplosion(){
-        if(!finalizado()){
             if (j.contadorFrames%6==0) {
                 puntero_explosion = j.explosion.getWidth() / 9 * estadoExplosion;
                 estadoExplosion++;
-        }
+
         }
     }
 }
