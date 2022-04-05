@@ -131,6 +131,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         iteradorMisilesBuenos = miMisilDisparado.iterator();
 
 
+        explotarMisil(AnchoPantalla,AltoPantalla);
 
 
     }
@@ -342,47 +343,46 @@ public void dimesionesPantalla(){
                 //Actualización del misil
                 mi.actualizarMiMisilSprite();
 
-/*
-                if (mi.coordenadaYMisil==0){
-                    misilesEnemigos.remove(mi);
-                }*/
             }
 
 
            // explosiones.movimientoSpriteExplosion();
 
 
+/*
 
 
-            for (MiMisil miMisil: miMisilDisparado){
-               /* for (MisilEnemigo misilEnemigo: misilesEnemigos){
-                    if (miMisil.coordenadaMisil == misilEnemigo.coordenadaMisil && miMisil.coordenadaYMisil == misilEnemigo.coordenadaYMisil){
-                        explotarMisil();
+
+
+
+*/
+            for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();) {
+                MisilEnemigo e = it_enemigos.next();
+                for(Iterator<MiMisil> it_disparos=miMisilDisparado.iterator();it_disparos.hasNext();) {
+                    MiMisil d=it_disparos.next();
+                    explosiones.movimientoSpriteExplosion();
+
+                    if (explotar(e,d)) {
+                        /* Creamos un nuevo objeto explosión */
+                        explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
+                        //choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
+                        /* eliminamos de las listas tanto el disparo como el enemigo */
+                        try {
+                            it_enemigos.remove();
+                            it_disparos.remove();
+                        }
+                        catch(Exception ex){}
+                        misilesDestruidos++; //un enemigo menos para el final
 
                     }
-                    Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
-                    Log.d("Coordenadas de misiles enemigo", " X enemigo: " + misilEnemigo.coordenadaMisil + " Y enemigo: " + misilEnemigo.coordenadaYMisil);
 
-                }*/
-                while (iteradorMisilesMalos.hasNext()){
-                    if (miMisil.coordenadaMisil == explosiones.coordenadaXExplosionl && miMisil.coordenadaYMisil == explosiones.coordenadaYExplosion){
-                        explotarMisil();
-                        iteradorMisilesMalos.next();
-                        iteradorMisilesMalos.remove();
-                        miMisilDisparado.remove(miMisil);
-                        //misilesEnemigos.remove()
-                    }
-                    Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
-                    Log.d("Coordenadas de misiles enemigo", " X enemigo: " + explosiones.coordenadaXExplosionl + " Y enemigo: " + explosiones.coordenadaYExplosion);
                 }
-
             }
-
             explosiones.movimientoSpriteExplosion();
 
 
 
-        }
+       }
     }
 
 
@@ -402,9 +402,17 @@ public void dimesionesPantalla(){
         miMisilDisparado.add(misMisiles);
     }
 
-    private void explotarMisil(){
-        explosiones = new Choques(this, nuevoMisil.getCoordenadaMisil(), nuevoMisil.getCoordenadaYMisil());
+    private void explotarMisil(int coordenadaX, float coordenadaY){
+        explosiones = new Choques(this, coordenadaX, coordenadaY);
         choquesArrayList.add(explosiones);
+    }
+
+    private boolean explotar(MisilEnemigo e, MiMisil d){
+        int alto_mayor=misilEnemigo.getHeight()>miMisil.getHeight()?misilEnemigo.getHeight():miMisil.getHeight();
+        int ancho_mayor=misilEnemigo.getWidth()>miMisil.getWidth()?misilEnemigo.getWidth():miMisil.getWidth();
+        float diferenciaX=Math.abs(nuevoMisil.coordenadaMisil-misMisiles.coordenadaMisil);
+        float diferenciaY=Math.abs(nuevoMisil.coordenadaYMisil- misMisiles.coordenadaYMisil);
+        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;
     }
 
 

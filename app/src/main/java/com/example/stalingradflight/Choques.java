@@ -22,7 +22,7 @@ public class Choques {
         this.j = j;
         this.coordenadaXExplosionl = coordenadaXExplosionl;
         this.coordenadaYExplosion = coordenadaYExplosion;
-
+        puntero_explosion=0;
         sonidoExplosion = MediaPlayer.create(j.getContext(), R.raw.explosion);
         sonidoExplosion.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
