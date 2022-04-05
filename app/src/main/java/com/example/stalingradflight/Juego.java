@@ -365,7 +365,10 @@ public void dimesionesPantalla(){
                 while (iteradorMisiles.hasNext()){
                     if (miMisil.coordenadaMisil == explosiones.coordenadaXExplosionl && miMisil.coordenadaYMisil == explosiones.coordenadaYExplosion){
                         explotarMisil();
-
+                        iteradorMisiles.next();
+                        iteradorMisiles.remove();
+                        miMisilDisparado.remove(miMisil);
+                        //misilesEnemigos.remove()
                     }
                     Log.d("Coordenadas de mis misiles", " X: " + miMisil.coordenadaMisil + " Y " + miMisil.coordenadaYMisil);
                     Log.d("Coordenadas de misiles enemigo", " X enemigo: " + explosiones.coordenadaXExplosionl + " Y enemigo: " + explosiones.coordenadaYExplosion);
