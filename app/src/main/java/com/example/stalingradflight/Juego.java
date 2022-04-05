@@ -362,7 +362,7 @@ public void dimesionesPantalla(){
                     MiMisil d=it_disparos.next();
                     explosiones.movimientoSpriteExplosion();
 
-                    if (explotar(e,d)) {
+                    if (colision(e,d)) {
                         /* Creamos un nuevo objeto explosión */
                         explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
                         //choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
@@ -370,7 +370,7 @@ public void dimesionesPantalla(){
                         try {
                             it_enemigos.remove();
                             it_disparos.remove();
-                            choquesArrayList.remove(this);
+                          //  choquesArrayList.remove(this);
                         }
                         catch(Exception ex){}
                         misilesDestruidos++; //un enemigo menos para el final
@@ -408,12 +408,11 @@ public void dimesionesPantalla(){
         choquesArrayList.add(explosiones);
     }
 
-    private boolean explotar(MisilEnemigo e, MiMisil d){
-        int alto_mayor=misilEnemigo.getHeight()>miMisil.getHeight()?misilEnemigo.getHeight():miMisil.getHeight();
-        int ancho_mayor=misilEnemigo.getWidth()>miMisil.getWidth()?misilEnemigo.getWidth():miMisil.getWidth();
-        float diferenciaX=Math.abs(nuevoMisil.coordenadaMisil-misMisiles.coordenadaMisil);
-        float diferenciaY=Math.abs(nuevoMisil.coordenadaYMisil- misMisiles.coordenadaYMisil);
-        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;
+    public boolean colision(MisilEnemigo e, MiMisil d){
+        Bitmap enemigo=misilEnemigo;
+        Bitmap disparo=miMisil;
+        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil,
+                disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);
     }
 
 
