@@ -56,14 +56,15 @@ public class Choques {
     }
 
 
-
+public boolean finalizado(){
+        return estadoExplosion>=9;
+}
     public void movimientoSpriteExplosion(){
-        if (j.contadorFrames%6==0) {
-            puntero_explosion = j.explosion.getWidth() / 9 * estadoExplosion;
-            estadoExplosion++;
-           /* if (estadoExplosion > 8) {
-                j.explosion.recycle();
-            }*/
+        if(!finalizado()){
+            if (j.contadorFrames%6==0) {
+                puntero_explosion = j.explosion.getWidth() / 9 * estadoExplosion;
+                estadoExplosion++;
+        }
         }
     }
 }

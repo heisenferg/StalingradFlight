@@ -370,6 +370,7 @@ public void dimesionesPantalla(){
                         try {
                             it_enemigos.remove();
                             it_disparos.remove();
+                            choquesArrayList.remove(this);
                         }
                         catch(Exception ex){}
                         misilesDestruidos++; //un enemigo menos para el final
