@@ -72,7 +72,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private Musica musicaFondo;
     private Choques explosiones;
     private ArrayList<Choques> choquesArrayList = new ArrayList<Choques>();
-    public Iterator<MisilEnemigo> iteradorMisiles;
+    public Iterator<MisilEnemigo> iteradorMisilesMalos;
+    public Iterator<MiMisil> iteradorMisilesBuenos;
 
 
     public Juego(Activity context) {
@@ -126,7 +127,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
         //explosiones = new Choques(this,400,500);
-        iteradorMisiles = misilesEnemigos.iterator();
+        iteradorMisilesMalos = misilesEnemigos.iterator();
+        iteradorMisilesBuenos = miMisilDisparado.iterator();
 
 
 
@@ -362,11 +364,11 @@ public void dimesionesPantalla(){
                     Log.d("Coordenadas de misiles enemigo", " X enemigo: " + misilEnemigo.coordenadaMisil + " Y enemigo: " + misilEnemigo.coordenadaYMisil);
 
                 }*/
-                while (iteradorMisiles.hasNext()){
+                while (iteradorMisilesMalos.hasNext()){
                     if (miMisil.coordenadaMisil == explosiones.coordenadaXExplosionl && miMisil.coordenadaYMisil == explosiones.coordenadaYExplosion){
                         explotarMisil();
-                        iteradorMisiles.next();
-                        iteradorMisiles.remove();
+                        iteradorMisilesMalos.next();
+                        iteradorMisilesMalos.remove();
                         miMisilDisparado.remove(miMisil);
                         //misilesEnemigos.remove()
                     }
