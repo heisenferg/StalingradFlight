@@ -299,12 +299,13 @@ public void dimesionesPantalla(){
                     });
                     musica.start();
                 }*/
+                // No funciona correctamente, entra la música tarde siempre
                 musicaFondo = new Musica(this);
             }
 
 
             /**
-             * NIVELES
+             * NIVELES CAMBIAR
              */
             if (misilesDestruidos>=3){
                 victoria = true;
@@ -352,9 +353,6 @@ public void dimesionesPantalla(){
 
 
             }
-
-
-           // explosiones.movimientoSpriteExplosion();
 
 
 /*
