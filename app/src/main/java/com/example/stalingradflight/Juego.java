@@ -26,6 +26,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap misilEnemigo;
     public Bitmap miMisil;
     public Bitmap explosion;
+    public Bitmap banderaNazi, banderaComunista;
 
     private SurfaceHolder holder;
     private BucleJuego bucle;
@@ -103,6 +104,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Mapa, ancho, alto, filtro
         bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
 
+        //Banderas para fin de juego:
+        banderaNazi = BitmapFactory.decodeResource(getResources(), R.drawable.banderanazi);
+        banderaComunista = BitmapFactory.decodeResource(getResources(), R.drawable.banderacomunista);
 
         if (MainActivity.BANDO == 1){
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane2);
@@ -264,11 +268,11 @@ public void dimesionesPantalla(){
                     xAvion = (int) (xAvion + velocidad);
             }
             if (controles[DISPARO].pulsado){
-                // Controlamos que no podamos disparar más de un disparo cada 120 frames; aprox. 2 segundos
-                if (contadorFrames-tiempoUltimoDisparo>120){
+                // Controlamos que no podamos disparar más de un disparo cada 90 frames; aprox. 1,5 segundos
+                if (contadorFrames-tiempoUltimoDisparo>=90){
                     ponerMisilMioNuevo();
                     tiempoUltimoDisparo=contadorFrames;
-                } else {
+                } else if (contadorFrames-tiempoUltimoDisparo<90) {
                     //Sonido sin munición
                     noMunicion();
                 }
@@ -302,7 +306,9 @@ public void dimesionesPantalla(){
             /**
              * NIVELES
              */
-            if (misilesDestruidos>=10){
+            if (misilesDestruidos>=2){
+                victoria = true;
+
                 nivel=2;
             }
             if (misilesDestruidos>=20){
@@ -395,6 +401,7 @@ public void dimesionesPantalla(){
 
 
         }
+
     }
 
 
@@ -499,7 +506,36 @@ public void dimesionesPantalla(){
                         miexplosion.dibujarExplosion(canvas,myPaint);
 
             }
-                  // explosiones.dibujarExplosion(canvas,myPaint);
+
+            if (derrota==true){
+
+            }
+
+            if (victoria==true){
+                myPaint.setAlpha(0);
+                myPaint.setColor(Color.RED);
+
+                if (MainActivity.BANDO==1){
+                    //Bandera Nazi Victoria
+                    canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
+
+                    myPaint.setTextSize(AnchoPantalla/10);
+                    canvas.drawText("¡Alemania ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+                    myPaint.setTextSize(AnchoPantalla/20);
+                    canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+                }
+                if (MainActivity.BANDO==2){
+                    // Bandera Comunista Victoria
+                    canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight(), null);
+
+                    myPaint.setColor(Color.RED);
+                    myPaint.setTextSize(AnchoPantalla/10);
+                    canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+                    myPaint.setTextSize(AnchoPantalla/20);
+                    canvas.drawText("Acabaste con todos los misiles Nazis", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+                }
+
+            }
 
         }
     }
