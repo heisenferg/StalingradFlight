@@ -74,6 +74,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private ArrayList<Choques> choquesArrayList = new ArrayList<Choques>();
     public Iterator<MisilEnemigo> iteradorMisilesMalos;
     public Iterator<MiMisil> iteradorMisilesBuenos;
+    int tiempoUltimoDisparo = 0;
 
 
     public Juego(Activity context) {
@@ -226,7 +227,7 @@ public void dimesionesPantalla(){
     public void actualizar() {
 
         // Si no hay derrota ni victoria
-        if (derrota == false || victoria==false){
+        if (derrota == false && victoria==false){
             contadorFrames++;
             estadoAvion++;
 
@@ -263,12 +264,15 @@ public void dimesionesPantalla(){
                     xAvion = (int) (xAvion + velocidad);
             }
             if (controles[DISPARO].pulsado){
-                //PRUEBA MI MISIL
+                // Controlamos que no podamos disparar más de un disparo cada 120 frames; aprox. 2 segundos
+                if (contadorFrames-tiempoUltimoDisparo>120){
+                    ponerMisilMioNuevo();
+                    tiempoUltimoDisparo=contadorFrames;
+                } else {
+                    //Sonido sin munición
+                    noMunicion();
+                }
 
-                ponerMisilMioNuevo();
-                //misMisiles.posicionMiMisilY();
-                //misMisiles.actualizarMiMisilSprite();
-                //balas();
             }
             if (controles[MUSICA].pulsado){
                /* if (MainActivity.BANDO==1){
@@ -320,28 +324,26 @@ public void dimesionesPantalla(){
 
 
 
-            int tiempoAleatorioMisilEnemigo = coordenada.nextInt(1000)+1;
+            int tiempoAleatorioMisilEnemigo = coordenada.nextInt(2000)+1;
             //Cada X frames aleatorios, pinto un misil
             if (contadorFrames%tiempoAleatorioMisilEnemigo==0){
                 ponerEnemigoNuevo();
-
             }
+
             //Posición del misil por cada misil enemigo
             for(MisilEnemigo e: misilesEnemigos){
                 e.posicionMisilY();
                 //Actualización del misil
                 e.actualizarMisilSprite();
-           /*     if (e.coordenadaYMisil>AltoPantalla){
-                    misilesEnemigos.remove(e);
-                }*/
             }
 
 
             //Posición de mi misil por cada misil
             for(MiMisil mi: miMisilDisparado){
-                mi.posicionMiMisilY();
-                //Actualización del misil
-                mi.actualizarMiMisilSprite();
+                    mi.posicionMiMisilY();
+                    //Actualización del misil
+                    mi.actualizarMiMisilSprite();
+
 
             }
 
@@ -356,34 +358,43 @@ public void dimesionesPantalla(){
 
 
 */
+            //Explosiones
             for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();) {
                 MisilEnemigo e = it_enemigos.next();
                 for(Iterator<MiMisil> it_disparos=miMisilDisparado.iterator();it_disparos.hasNext();) {
                     MiMisil d=it_disparos.next();
-                    explosiones.movimientoSpriteExplosion();
 
                     if (colision(e,d)) {
-                        /* Creamos un nuevo objeto explosión */
+                        // Creamos un nuevo objeto explosión
                         explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        //choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
+                        //explosiones.movimientoSpriteExplosion();
+
+                        choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
                         /* eliminamos de las listas tanto el disparo como el enemigo */
                         try {
                             it_enemigos.remove();
                             it_disparos.remove();
-                          //  choquesArrayList.remove(this);
                         }
                         catch(Exception ex){}
-                        misilesDestruidos++; //un enemigo menos para el final
+                        misilesDestruidos++;
 
                     }
 
                 }
             }
+
             explosiones.movimientoSpriteExplosion();
 
+            // Actualizar explosiones
+            for(Iterator<Choques> it_explosiones = choquesArrayList.iterator(); it_explosiones.hasNext();){
+                Choques exp=it_explosiones.next();
+                exp.estadoExplosion++;
+                if(exp.estadoExplosion>=9) it_explosiones.remove();
+            }
 
 
-       }
+
+        }
     }
 
 
@@ -469,10 +480,7 @@ public void dimesionesPantalla(){
             //Pintar mis misiles
             for (MiMisil mi : miMisilDisparado){
                 mi.pintarMiMisil(canvas, myPaint);
-                // Cuando desaparezca por arriba, se borra
-              /*  if (mi.coordenadaYMisil==0){
 
-                }*/
             }
 
 
@@ -635,8 +643,8 @@ public void dimesionesPantalla(){
     /**
      * Ejemplo, hay que cambiar
      */
-    public void balas(){
-        reprductor = MediaPlayer.create(activity, R.raw.shoot);
+    public void noMunicion(){
+        reprductor = MediaPlayer.create(activity, R.raw.noanmo);
         reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
