@@ -306,7 +306,7 @@ public void dimesionesPantalla(){
             /**
              * NIVELES
              */
-            if (misilesDestruidos>=2){
+            if (misilesDestruidos>=3){
                 victoria = true;
 
                 nivel=2;
@@ -364,16 +364,18 @@ public void dimesionesPantalla(){
 
 
 */
+
+
             //Explosiones
             for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();) {
                 MisilEnemigo e = it_enemigos.next();
+
                 for(Iterator<MiMisil> it_disparos=miMisilDisparado.iterator();it_disparos.hasNext();) {
                     MiMisil d=it_disparos.next();
 
                     if (colision(e,d)) {
                         // Creamos un nuevo objeto explosión
                         explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        //explosiones.movimientoSpriteExplosion();
 
                         choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
                         /* eliminamos de las listas tanto el disparo como el enemigo */
@@ -383,13 +385,17 @@ public void dimesionesPantalla(){
                         }
                         catch(Exception ex){}
                         misilesDestruidos++;
+                       // explosiones.movimientoSpriteExplosion();
+
 
                     }
 
                 }
+                explosiones.movimientoSpriteExplosion();
+
             }
 
-            explosiones.movimientoSpriteExplosion();
+            //explosiones.movimientoSpriteExplosion();
 
             // Actualizar explosiones
             for(Iterator<Choques> it_explosiones = choquesArrayList.iterator(); it_explosiones.hasNext();){

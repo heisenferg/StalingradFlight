@@ -23,6 +23,7 @@ public class Choques {
         this.coordenadaXExplosionl = coordenadaXExplosionl;
         this.coordenadaYExplosion = coordenadaYExplosion;
         puntero_explosion=0;
+        estadoExplosion=0;
         sonidoExplosion = MediaPlayer.create(j.getContext(), R.raw.explosion);
         sonidoExplosion.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -60,10 +61,10 @@ public boolean finalizado(){
         return estadoExplosion>=9;
 }
     public void movimientoSpriteExplosion(){
-            if (j.contadorFrames%6==0) {
-                puntero_explosion = j.explosion.getWidth() / 9 * estadoExplosion;
+            if (j.contadorFrames%12==0) {
+                puntero_explosion = j.explosion.getWidth() / 8 * estadoExplosion;
                 estadoExplosion++;
-
         }
+
     }
 }
