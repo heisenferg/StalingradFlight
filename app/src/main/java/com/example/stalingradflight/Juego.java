@@ -300,6 +300,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     musica.start();
                 }*/
                 // No funciona correctamente, entra la música tarde siempre
+                musica.stop();
                 musicaFondo = new Musica(this);
             }
 
@@ -517,21 +518,21 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     public void victoriaFindeJuego(Paint myPaint, Canvas canvas){
         myPaint.setAlpha(0);
-        myPaint.setColor(Color.RED);
 
         if (MainActivity.BANDO==1){
             //Bandera Nazi Victoria
             canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
-
+            myPaint.setColor(Color.GREEN);
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("¡Alemania ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+            musica.stop();
+            musicaFondo = new Musica(this);
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
             canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight(), null);
-
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
