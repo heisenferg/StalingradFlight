@@ -57,13 +57,13 @@ public class Choques {
     }
 
 
-public boolean finalizado(){
+    public boolean finalizado(){
         return estadoExplosion>=9;
-}
+    }
     public void movimientoSpriteExplosion(){
-            if (j.contadorFrames%12==0) {
-                puntero_explosion = j.explosion.getWidth() / 8 * estadoExplosion;
-                estadoExplosion++;
+        if (j.contadorFrames%12==0) {
+            puntero_explosion = j.explosion.getWidth() / 8 * estadoExplosion;
+            estadoExplosion++;
         }
 
     }
