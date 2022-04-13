@@ -2,6 +2,7 @@ package com.example.stalingradflight;
 
 import static com.example.stalingradflight.Juego.coordenada;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -11,12 +12,12 @@ public class MisilEnemigo {
 
     //Velocidad = velocidad*nivel;
     private float velocidadMisil;
-    private int nivel;
+    private int nivel=1;
     private Juego j;
     public float puntero_misil=0;
     public int estadoMisil=0;
     public int coordenadaMisil;
-    public float coordenadaYMisil=0;
+    public float coordenadaYMisil;
     private BucleJuego bucleJuego;
 
     public int getCoordenadaMisil() {
@@ -31,8 +32,9 @@ public class MisilEnemigo {
     public MisilEnemigo(Juego juego, int Nivel){
         j = juego;
         nivel = Nivel;
-        nivel = 1;
-        posicionMisilX();
+        coordenadaYMisil=0;
+        coordenadaMisil = posicionMisilX();
+        Log.d("Posición misil X", " X:" + coordenadaMisil);
     }
 
 
@@ -75,5 +77,8 @@ public class MisilEnemigo {
         }
     }
 
+    public Bitmap bitmap(){
+        return j.misilEnemigo;
+    }
 
 }

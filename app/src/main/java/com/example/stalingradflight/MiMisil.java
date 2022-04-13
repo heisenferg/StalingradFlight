@@ -16,6 +16,7 @@ public class MiMisil {
     public float puntero_misil=0;
     public int estadoMisil=0;
     public int coordenadaMisil;
+    public int coordenadaX;
     public float coordenadaYMisil=0;
     public MediaPlayer sonidoDisparo;
     private BucleJuego bucleJuego;
@@ -40,8 +41,9 @@ public class MiMisil {
     public MiMisil(Juego juego, float coordenadaX, float coordenadaY){
         j = juego;
         nivel = 1;
-        // Coordenada X se pinta donde esté el avión más dimesión del avión/2 para disparar desde el centro
-        coordenadaMisil = (int) (coordenadaX + j.avion.getWidth()/2);
+        // Coordenada X se pinta donde esté el avión más dimensión del avión/2 para disparar desde el centro
+        coordenadaMisil = (int) (coordenadaX + j.avion.getWidth()/3);
+        this.coordenadaX = coordenadaMisil;
         // Coordenada Y en posicion avión menos la altura del avión
       //  coordenadaYMisil = coordenadaY-j.avion.getHeight()/2;
         coordenadaYMisil = (int) (coordenadaY + j.avion.getHeight());

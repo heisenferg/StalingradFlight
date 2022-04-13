@@ -25,8 +25,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap avion;
     public Bitmap misilEnemigo;
     public Bitmap miMisil;
-    public Bitmap explosion;
+    public Bitmap explosion, explosionDerrota;
     public Bitmap banderaNazi, banderaComunista;
+
 
     private SurfaceHolder holder;
     private BucleJuego bucle;
@@ -151,6 +152,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
     public void cargarExplosiones(){
+        //Cargo la explosión de mi avión en caso de derrota
+        explosionDerrota = BitmapFactory.decodeResource(getResources(), R.drawable.explosionmiavion);
+
         if (MainActivity.BANDO==1){
             explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosionnazi);
             explosion.createScaledBitmap(explosion, 70, 110, false);
@@ -159,6 +163,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosionsovietica);
             explosion.createScaledBitmap(explosion, 70, 110, false);
         }
+
+
     }
 
 
@@ -332,7 +338,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
 
-            int tiempoAleatorioMisilEnemigo = coordenada.nextInt(2000)+1;
+            int tiempoAleatorioMisilEnemigo = coordenada.nextInt(1500)+1;
             //Cada X frames aleatorios, pinto un misil
             if (contadorFrames%tiempoAleatorioMisilEnemigo==0){
                 ponerEnemigoNuevo();
@@ -370,8 +376,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     if (colision(e,d)) {
                         // Creamos un nuevo objeto explosión
 
-                        explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil));
+                       // explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
+                        choquesArrayList.add(new Choques(this,e.getCoordenadaMisil(), e.getCoordenadaYMisil()));
                         /* eliminamos de las listas tanto el disparo como el enemigo */
                         try {
                             it_enemigos.remove();
@@ -388,17 +394,23 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 explosiones.movimientoSpriteExplosion();
             }
 
-            //explosiones.movimientoSpriteExplosion();
-
             // Actualizar explosiones
             for(Iterator<Choques> it_explosiones = choquesArrayList.iterator(); it_explosiones.hasNext();){
                 Choques exp=it_explosiones.next();
                 exp.estadoExplosion++;
-                if(exp.estadoExplosion>=9) it_explosiones.remove();
+                if(exp.estadoExplosion>=8) it_explosiones.remove();
             }
 
+/*
+            // Mi explosion derrota
+            for(MisilEnemigo misilEnemigo: misilesEnemigos){
+                if(colisionDerrota(misilEnemigo, avion)){
+                    explotarMisil(xAvion,yAvion);
+                    derrota=true;
+                }
+            }
 
-
+*/
         }
 
     }
@@ -426,13 +438,20 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
     public boolean colision(MisilEnemigo e, MiMisil d){
-        Bitmap enemigo=misilEnemigo;
-        Bitmap disparo=miMisil;
-        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil,
-                disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);
+        Bitmap enemigo=e.bitmap();
+        Bitmap disparo=this.miMisil;
+        return Colision.hayColision(enemigo,(int) e.getCoordenadaMisil(),(int)e.getCoordenadaYMisil(),
+                disparo,(int)d.getCoordenadaMisil(),(int)d.getCoordenadaYMisil());
     }
 
+    // Si choca misil enemigo contra mi avion
+    public boolean colisionDerrota(MisilEnemigo e, Bitmap av){
+        Bitmap enemigo=misilEnemigo;
+        Bitmap avi=avion;
+        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil,
+                avi,xAvion,yAvion);
 
+    }
 
     /**
      * Este método dibuja el siguiente paso de la animación correspondiente
@@ -479,6 +498,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
 
 
+            // Dibujamos los enemigos
             for(MisilEnemigo e: misilesEnemigos){
                 e.pintarMisilEnemigo(canvas,myPaint);
             }
@@ -486,25 +506,19 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             //Pintar mis misiles
             for (MiMisil mi : miMisilDisparado){
                 mi.pintarMiMisil(canvas, myPaint);
-
             }
 
 
-            //PRUEBAS
-            // misMisiles.pintarMiMisil(canvas, myPaint);
-            //  nuevoMisil.pintarMisilEnemigo(canvas, myPaint);
-
-         /*   for (MiMisil misil: miMisilDisparado){
-                if (explosiones.hayChoque(this,misil.getCoordenadaMisil(), misil.getCoordenadaYMisil()) ==true){
-                    explosiones.dibujarExplosion(canvas,myPaint);
-                }
-            }*/
+            // Dibujamos la explosión
             for (Choques miexplosion: choquesArrayList){
                 miexplosion.dibujarExplosion(canvas,myPaint);
-
             }
 
+
+
+            // Condiciones de drrota y victoria
             if (derrota==true){
+                explosiones.dibujarExplosionDerrota(canvas, myPaint);
                 derrotaFindeJuego(myPaint, canvas);
             }
 
