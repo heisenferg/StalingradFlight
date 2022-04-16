@@ -276,8 +276,16 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             if (controles[DISPARO].pulsado){
                 // Controlamos que no podamos disparar más de un disparo cada 90 frames; aprox. 1,5 segundos
                 if (contadorFrames-tiempoUltimoDisparo>=90){
-                    ponerMisilMioNuevo();
+                    for (MisilEnemigo e: misilesEnemigos){
+                        Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
+
+                        if ((int)xAvion<(int)e.coordenadaMisil-misilEnemigo.getWidth() || (int)xAvion>(int)e.coordenadaMisil+misilEnemigo.getWidth()){
+                            Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
+                            ponerMisilMioNuevo();
+                        }
+                    }
                     tiempoUltimoDisparo=contadorFrames;
+
                 } else if (contadorFrames-tiempoUltimoDisparo<90) {
                     //Sonido sin munición
                     noMunicion();
@@ -414,7 +422,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 }
             }
 */
-            comprobarDerrota();
+           // comprobarDerrota();
 
 
         }
@@ -443,18 +451,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         choquesArrayList.add(explosiones);
     }
 
+
     public boolean colision(MisilEnemigo e, MiMisil d){
-      /*  Bitmap enemigo=e.bitmap();
+        Bitmap enemigo=e.bitmap();
         Bitmap disparo=miMisil;
         Log.d("ColisionesA:", "e.coordenadasMisil: " + e.coordenadaMisil + ", e.coordenadaYMisil: " + e.coordenadaYMisil + "\n" +
                 "xAvion: " + xAvion +" d.coordenadaYMisil:" + d.coordenadaYMisil);
         return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int) e.coordenadaYMisil-misilEnemigo.getHeight()/2,
-                disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);*/
-        int alto_mayor=misilEnemigo.getHeight()>miMisil.getHeight()?misilEnemigo.getHeight():miMisil.getHeight();
-        int ancho_mayor=misilEnemigo.getWidth()>miMisil.getWidth()?misilEnemigo.getWidth():miMisil.getWidth();
-        float diferenciaX=Math.abs(e.coordenadaMisil-d.coordenadaMisil);
-        float diferenciaY=Math.abs(e.coordenadaYMisil-d.getCoordenadaYMisil());
-        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;
+                disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);
     }
 
     // Si choca misil enemigo contra mi avion
@@ -482,18 +486,20 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     }
 
-    public void comprobarDerrota(){
-        //Explosión derrota
-        for(MisilEnemigo e : misilesEnemigos) {
-            Log.d("Aquí:", " entra hasta el iterador");
-            if (colisionDerrota(e)) {
-                Log.d("Aquí:", " entra colisionderrota");
-                //explotarMisil(xAvion, yAvion);
-                choquesArrayList.add(new Choques(this, xAvion+avion.getWidth()/2, yAvion+avion.getHeight()/2));
-                derrota = true;
+
+
+        public void comprobarDerrota() {
+            //Explosión derrota
+            for (MisilEnemigo e : misilesEnemigos) {
+                Log.d("Aquí:", " entra hasta el iterador");
+                if(colisionDerrota(e)){
+                        Log.d("Aquí:", " entra colisionderrota");
+                    //explotarMisil(xAvion, yAvion);
+                    choquesArrayList.add(new Choques(this, xAvion + avion.getWidth() / 2, yAvion + avion.getHeight() / 2));
+                    derrota = true;
+                }
             }
         }
-    }
 
     /**
      * Este método dibuja el siguiente paso de la animación correspondiente
