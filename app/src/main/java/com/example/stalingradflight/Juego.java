@@ -45,8 +45,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int puntero_Avion_sprite =0;
     private int avionW, avionH;
     private int contador_Frames = 0;
-    private int yAvion;
-    private int xAvion;
+    private float yAvion;
+    private float xAvion;
 
     private int tiempoCrucePantalla = 3;
     private float deltaT;
@@ -462,13 +462,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
               avion,xAvion,yAvion);
 */
-        if (xAvion >= e.coordenadaMisil && xAvion<=e.coordenadaMisil+avion.getWidth()){
-            Log.d("True:", "no entra al primer if");
-            if (yAvion <= e.coordenadaYMisil+misilEnemigo.getHeight()/2){
+        if (xAvion > e.coordenadaMisil && xAvion<e.coordenadaMisil+avion.getWidth() && yAvion < e.coordenadaYMisil &&
+        yAvion > e.coordenadaYMisil-misilEnemigo.getHeight()){
+            Log.d("True:", "entra al primer if");
+
                 Log.d("True: ", "es true");
 
                 return true;
-            }
+
         }
 
         Log.d("True: ", "es false");
