@@ -374,10 +374,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     MiMisil d=it_disparos.next();
 
                     if (colision(e,d)) {
-                        // Creamos un nuevo objeto explosión
 
                        // explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        choquesArrayList.add(new Choques(this,e.getCoordenadaMisil(), e.getCoordenadaYMisil()));
+                        choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil-e.bitmap().getHeight()/2));
+                        Log.d("Choques en array: ", "e.coordenadaMisil: " + e.coordenadaMisil +
+                                " e.coordenadaYMisil: " + e.coordenadaYMisil + " d.coordenadaMisil: " +
+                                d.coordenadaMisil + " d.coordenadaYMisil: " + d.coordenadaYMisil);
                         /* eliminamos de las listas tanto el disparo como el enemigo */
                         try {
                             it_enemigos.remove();
@@ -394,6 +396,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 explosiones.movimientoSpriteExplosion();
             }
 
+
+
             // Actualizar explosiones
             for(Iterator<Choques> it_explosiones = choquesArrayList.iterator(); it_explosiones.hasNext();){
                 Choques exp=it_explosiones.next();
@@ -409,8 +413,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     derrota=true;
                 }
             }
-
 */
+
+            comprobarDerrota();
+
+
         }
 
     }
@@ -439,18 +446,47 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     public boolean colision(MisilEnemigo e, MiMisil d){
         Bitmap enemigo=e.bitmap();
-        Bitmap disparo=this.miMisil;
-        return Colision.hayColision(enemigo,(int) e.getCoordenadaMisil(),(int)e.getCoordenadaYMisil(),
-                disparo,(int)d.getCoordenadaMisil(),(int)d.getCoordenadaYMisil());
+        Bitmap disparo=miMisil;
+        Log.d("ColisionesA:", "e.coordenadasMisil: " + e.coordenadaMisil + ", e.coordenadaYMisil: " + e.coordenadaYMisil + "\n" +
+                "xAvion: " + xAvion +" d.coordenadaYMisil:" + d.coordenadaYMisil);
+        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int) e.coordenadaYMisil-misilEnemigo.getHeight()/2,
+                disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);
     }
 
     // Si choca misil enemigo contra mi avion
-    public boolean colisionDerrota(MisilEnemigo e, Bitmap av){
-        Bitmap enemigo=misilEnemigo;
-        Bitmap avi=avion;
-        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil,
-                avi,xAvion,yAvion);
+    public boolean colisionDerrota(MisilEnemigo e){
+      /*  Bitmap enemigo=e.bitmap();
+        Log.d("Colisiones:", "e.coordenadasMisil: " + e.coordenadaMisil + ", e.coordenadaYMisil: " + e.coordenadaYMisil + "\n" +
+                "xAvion: " + xAvion +" maxY:" + maxY);
+        if(e.coordenadaMisil==xAvion && e.coordenadaYMisil==yAvion){
+            return true;
+        }
+        //EL siguiente yAvion hace explotar abajo del avión
+      //  return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
+      //          av,xAvion,yAvion);
+return false;*/
+        int alto_mayor=misilEnemigo.getHeight()>avion.getHeight()?misilEnemigo.getHeight():avion.getHeight();
+        int ancho_mayor=misilEnemigo.getWidth()>avion.getWidth()?misilEnemigo.getWidth():avion.getWidth();
+        float diferenciaX=Math.abs(e.coordenadaMisil-xAvion);
+        float diferenciaY=Math.abs(e.coordenadaYMisil-yAvion);
+        Log.d("colisionDerrota: ", " alto_mayor: " +e.bitmap().getHeight() + " avion.getHeight(): " +avion.getHeight()
+        + " TOTAL ALTO MAYOR: " + alto_mayor);
+        Log.d(" colisionDerrotaAncho:", "e.bitmap().getWidth(): " +e.bitmap().getWidth() + " avion.getWidth(): " +avion.getWidth() +
+                " TOTAL ANCHO MAYOR: " + ancho_mayor);
+        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;
+    }
 
+    public void comprobarDerrota(){
+        //Explosión derrota
+        for(MisilEnemigo e : misilesEnemigos) {
+            Log.d("Aquí:", " entra hasta el iterador");
+            if (colisionDerrota(e)) {
+                Log.d("Aquí:", " entra colisionderrota");
+                //explotarMisil(xAvion, yAvion);
+                choquesArrayList.add(new Choques(this, xAvion+avion.getWidth()/2, yAvion+avion.getHeight()/2));
+                derrota = true;
+            }
+        }
     }
 
     /**
@@ -518,7 +554,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             // Condiciones de drrota y victoria
             if (derrota==true){
-                explosiones.dibujarExplosionDerrota(canvas, myPaint);
+                //explosiones.dibujarExplosionDerrota(canvas, myPaint);
                 derrotaFindeJuego(myPaint, canvas);
             }
 
@@ -546,7 +582,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
-            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight(), null);
+            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight()*2, null);
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
@@ -561,22 +597,22 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         if (MainActivity.BANDO==1){
             //Bandera Nazi Victoria
-            canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
+            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
 
             myPaint.setTextSize(AnchoPantalla/10);
-            canvas.drawText("¡Alemania ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+            canvas.drawText("¡Rusia te ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
-            canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+            canvas.drawText("No pudiste cambiar el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
-            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight(), null);
+            canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight()*2, null);
 
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
-            canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+            canvas.drawText("¡Alemania te ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
-            canvas.drawText("Acabaste con todos los misiles Nazis", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+            canvas.drawText("El curso de la historia tomará otros derroteros", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
         }
     }
 

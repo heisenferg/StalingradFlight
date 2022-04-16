@@ -1,8 +1,5 @@
 package com.example.stalingradflight;
 
-import static com.example.stalingradflight.Juego.coordenada;
-
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -15,18 +12,18 @@ public class MiMisil {
     private Juego j;
     public float puntero_misil=0;
     public int estadoMisil=0;
-    public int coordenadaMisil;
-    public int coordenadaX;
+    public float coordenadaMisil;
+    public float coordenadaX;
     public float coordenadaYMisil=0;
     public MediaPlayer sonidoDisparo;
     private BucleJuego bucleJuego;
 
 
-    public int getCoordenadaMisil() {
+    public float getCoordenadaMisil() {
         return coordenadaMisil;
     }
 
-    public void setCoordenadaMisil(int coordenadaMisil) {
+    public void setCoordenadaMisil(float coordenadaMisil) {
         this.coordenadaMisil = coordenadaMisil;
     }
 
@@ -62,7 +59,7 @@ public class MiMisil {
 
         //En coordenadas le pongo entre 1.5 para adecuar
         canvas.drawBitmap(j.miMisil, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
-                new Rect(coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
+                new Rect((int)coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), (int)coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
                 null);
         Log.d("MISIL: ", " Y Mi Misil: " + coordenadaYMisil +
                 " X mi  misil: " + coordenadaMisil + " velocidad mi misil: " + velocidadMisil);

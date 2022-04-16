@@ -16,11 +16,11 @@ public class MisilEnemigo {
     private Juego j;
     public float puntero_misil=0;
     public int estadoMisil=0;
-    public int coordenadaMisil;
+    public float coordenadaMisil;
     public float coordenadaYMisil;
     private BucleJuego bucleJuego;
 
-    public int getCoordenadaMisil() {
+    public float getCoordenadaMisil() {
         return coordenadaMisil;
     }
 
@@ -32,6 +32,7 @@ public class MisilEnemigo {
     public MisilEnemigo(Juego juego, int Nivel){
         j = juego;
         nivel = Nivel;
+        velocidadMisil = velocidadMisil * Nivel;
         coordenadaYMisil=0;
         coordenadaMisil = posicionMisilX();
         Log.d("Posición misil X", " X:" + coordenadaMisil);
@@ -44,7 +45,7 @@ public class MisilEnemigo {
         //Recortar misil
         //En coordenadas le pongo entre 1.5 para adecuar
         canvas.drawBitmap(j.misilEnemigo, new Rect((int) puntero_misil, 0, (int) (puntero_misil + j.misilEnemigo.getWidth()/9), j.misilEnemigo.getHeight()),
-                    new Rect(coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
+                    new Rect((int)coordenadaMisil, (int) coordenadaYMisil-j.misilEnemigo.getHeight(), (int)coordenadaMisil+j.misilEnemigo.getWidth()/9, (int) (j.misilEnemigo.getHeight()/1.5+coordenadaYMisil)-j.misilEnemigo.getHeight()),
                 null);
         Log.d("MISIL: ", " Y Misil: " + coordenadaYMisil +
                 " X misil: " + coordenadaMisil + " velocidad: " + velocidadMisil);
@@ -56,7 +57,7 @@ public class MisilEnemigo {
 
     }
 
-    public int posicionMisilX(){
+    public float posicionMisilX(){
         coordenadaMisil = coordenada.nextInt(j.AnchoPantalla);
         return coordenadaMisil;
     }
