@@ -376,7 +376,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     if (colision(e,d)) {
 
                        // explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        choquesArrayList.add(new Choques(this,e.coordenadaMisil, e.coordenadaYMisil-e.bitmap().getHeight()/2));
+                        choquesArrayList.add(new Choques(this,d.coordenadaMisil-miMisil.getWidth()/2, d.coordenadaYMisil-misilEnemigo.getHeight()/2));
                         Log.d("Choques en array: ", "e.coordenadaMisil: " + e.coordenadaMisil +
                                 " e.coordenadaYMisil: " + e.coordenadaYMisil + " d.coordenadaMisil: " +
                                 d.coordenadaMisil + " d.coordenadaYMisil: " + d.coordenadaYMisil);
@@ -456,24 +456,24 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     // Si choca misil enemigo contra mi avion
     public boolean colisionDerrota(MisilEnemigo e){
       /*  Bitmap enemigo=e.bitmap();
-        Log.d("Colisiones:", "e.coordenadasMisil: " + e.coordenadaMisil + ", e.coordenadaYMisil: " + e.coordenadaYMisil + "\n" +
-                "xAvion: " + xAvion +" maxY:" + maxY);
-        if(e.coordenadaMisil==xAvion && e.coordenadaYMisil==yAvion){
-            return true;
-        }
+        Log.d("Colisiones:", "e.coordenadasMisil: " + Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
+                avion,xAvion,yAvion));
         //EL siguiente yAvion hace explotar abajo del avión
-      //  return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
-      //          av,xAvion,yAvion);
-return false;*/
-        int alto_mayor=misilEnemigo.getHeight()>avion.getHeight()?misilEnemigo.getHeight():avion.getHeight();
-        int ancho_mayor=misilEnemigo.getWidth()>avion.getWidth()?misilEnemigo.getWidth():avion.getWidth();
-        float diferenciaX=Math.abs(e.coordenadaMisil-xAvion);
-        float diferenciaY=Math.abs(e.coordenadaYMisil-yAvion);
-        Log.d("colisionDerrota: ", " alto_mayor: " +e.bitmap().getHeight() + " avion.getHeight(): " +avion.getHeight()
-        + " TOTAL ALTO MAYOR: " + alto_mayor);
-        Log.d(" colisionDerrotaAncho:", "e.bitmap().getWidth(): " +e.bitmap().getWidth() + " avion.getWidth(): " +avion.getWidth() +
-                " TOTAL ANCHO MAYOR: " + ancho_mayor);
-        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;
+        return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
+              avion,xAvion,yAvion);
+*/
+        if (xAvion >= e.coordenadaMisil && xAvion<=e.coordenadaMisil+avion.getWidth()){
+            Log.d("True:", "no entra al primer if");
+            if (yAvion <= e.coordenadaYMisil+misilEnemigo.getHeight()/2){
+                Log.d("True: ", "es true");
+
+                return true;
+            }
+        }
+
+        Log.d("True: ", "es false");
+
+        return false;
     }
 
     public void comprobarDerrota(){
