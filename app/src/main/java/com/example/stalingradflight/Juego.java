@@ -584,7 +584,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             // Dibujamos la derrota
             for (Choques choqueDerrota: choqueDerrotaArray){
-                dibujarDerrota(canvas);
 
                 choqueDerrota.dibujarExplosionDerrota(canvas,myPaint);
             }
@@ -644,9 +643,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
 
             myPaint.setTextSize(AnchoPantalla/10);
-            canvas.drawText("¡Rusia te ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+            canvas.drawText("¡Rusia te ganó!", 0, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
-            canvas.drawText("No pudiste cambiar el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+            canvas.drawText("No pudiste cambiar el curso de la historia", 0, AltoPantalla/2+100, myPaint);
+            dibujarDerrota(canvas);
+
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
@@ -654,9 +655,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
-            canvas.drawText("¡Alemania te ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+            canvas.drawText("¡Alemania te ganó!", 0, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
-            canvas.drawText("El curso de la historia tomará otros derroteros", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+            canvas.drawText("El curso de la historia tomará otros derroteros", 0, AltoPantalla/2+100, myPaint);
+            dibujarDerrota(canvas);
+
         }
     }
 
