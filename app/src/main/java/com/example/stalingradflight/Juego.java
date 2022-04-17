@@ -113,6 +113,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         if (MainActivity.BANDO == 1){
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane2);
+            avionOut = BitmapFactory.decodeResource(getResources(), R.drawable.naziplaneout);
+
         } else {
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
             avionOut = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplaneout);
