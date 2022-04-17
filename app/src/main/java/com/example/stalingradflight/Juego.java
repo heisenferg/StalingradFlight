@@ -276,14 +276,16 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             if (controles[DISPARO].pulsado){
                 // Controlamos que no podamos disparar más de un disparo cada 90 frames; aprox. 1,5 segundos
                 if (contadorFrames-tiempoUltimoDisparo>=90){
-                    for (MisilEnemigo e: misilesEnemigos){
+                   /* for (MisilEnemigo e: misilesEnemigos){
                         Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
 
-                        if ((int)xAvion<(int)e.coordenadaMisil-misilEnemigo.getWidth() || (int)xAvion>(int)e.coordenadaMisil+misilEnemigo.getWidth()){
+                        if ((int)xAvion+avion.getWidth()/2 > (int) e.coordenadaMisil && (int)xAvion+avion.getWidth()/2 < (int)e.coordenadaMisil+misilEnemigo.getWidth()){
                             Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
                             ponerMisilMioNuevo();
                         }
-                    }
+                    }*/
+                    ponerMisilMioNuevo();
+
                     tiempoUltimoDisparo=contadorFrames;
 
                 } else if (contadorFrames-tiempoUltimoDisparo<90) {
@@ -384,7 +386,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     if (colision(e,d)) {
 
                        // explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-                        choquesArrayList.add(new Choques(this,e.coordenadaMisil+misilEnemigo.getWidth()/2, e.coordenadaYMisil+misilEnemigo.getHeight()/2));
+
+                        choquesArrayList.add(new Choques(this,e.coordenadaMisil-avion.getWidth()/2, d.coordenadaYMisil-misilEnemigo.getHeight()/2));
                         Log.d("Choques en array: ", "e.coordenadaMisil: " + e.coordenadaMisil +
                                 " e.coordenadaYMisil: " + e.coordenadaYMisil + " d.coordenadaMisil: " +
                                 d.coordenadaMisil + " d.coordenadaYMisil: " + d.coordenadaYMisil);
@@ -401,9 +404,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     }
 
                 }
-                explosiones.movimientoSpriteExplosion();
             }
 
+            explosiones.movimientoSpriteExplosion();
 
 
             // Actualizar explosiones
@@ -413,15 +416,18 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 if(exp.estadoExplosion>=9) it_explosiones.remove();
             }
 
-/*
+
             // Mi explosion derrota
             for(MisilEnemigo misilEnemigo: misilesEnemigos){
-                if(colisionDerrota(misilEnemigo, avion)){
-                    explotarMisil(xAvion,yAvion);
+                if(misilEnemigo.coordenadaYMisil>=AltoPantalla){
+
+                    derrota=true;
+                }
+                if(misilEnemigo.coordenadaYMisil>=yAvion+avion.getHeight()/2 && misilEnemigo.coordenadaMisil>=xAvion && misilEnemigo.coordenadaMisil<xAvion+avion.getWidth()){
                     derrota=true;
                 }
             }
-*/
+
            // comprobarDerrota();
 
 
@@ -468,7 +474,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 avion,(int)xAvion,(int)yAvion));
         //EL siguiente yAvion hace explotar abajo del avión
         return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int)e.coordenadaYMisil-misilEnemigo.getHeight()/2,
-              avion,(int)xAvion,(int)yAvion);
+              avion,(int)xAvion,AltoPantalla);
 
       /*  if (xAvion > e.coordenadaMisil && xAvion<e.coordenadaMisil+avion.getWidth() && yAvion < e.coordenadaYMisil &&
         yAvion > e.coordenadaYMisil-misilEnemigo.getHeight()){
@@ -563,6 +569,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
 
+            if (contadorFrames <= 500){
+                myPaint.setColor(Color.RED);
+                canvas.drawText("Acaba con todos los misiles antes de que alcancen a tus tropas", AnchoPantalla/4,AltoPantalla/2,myPaint);
+            }
 
             // Condiciones de drrota y victoria
             if (derrota==true){
