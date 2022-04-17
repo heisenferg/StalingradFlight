@@ -586,7 +586,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             // Dibujamos la derrota
             for (Choques choqueDerrota: choqueDerrotaArray){
-
                 choqueDerrota.dibujarExplosionDerrota(canvas,myPaint);
             }
 
