@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
     private Bitmap bmpMapa;
-    public Bitmap avion;
+    public Bitmap avion, avionOut;
     public Bitmap misilEnemigo;
     public Bitmap miMisil;
     public Bitmap explosion, explosionDerrota;
@@ -66,6 +66,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private MisilEnemigo nuevoMisil;
     private ArrayList<MisilEnemigo> misilesEnemigos = new ArrayList<MisilEnemigo>();
     private ArrayList<MiMisil> miMisilDisparado = new ArrayList<MiMisil>();
+    private ArrayList<Choques> choqueDerrotaArray = new ArrayList<Choques>();
     private MediaPlayer musica;
     private int nivel;
     private int misilesDestruidos=0;
@@ -93,6 +94,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         cargarExplosiones();
 
 
+
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
         //Sonido
@@ -113,6 +115,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane2);
         } else {
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
+            avionOut = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplaneout);
+
         }
         Log.d("BANDO: " , " es " + MainActivity.BANDO);
 
@@ -154,6 +158,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public void cargarExplosiones(){
         //Cargo la explosión de mi avión en caso de derrota
         explosionDerrota = BitmapFactory.decodeResource(getResources(), R.drawable.explosionmiavion);
+        explosionDerrota.createScaledBitmap(explosionDerrota, 70, 110, false);
 
         if (MainActivity.BANDO==1){
             explosion = BitmapFactory.decodeResource(getResources(), R.drawable.explosionnazi);
@@ -424,7 +429,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     derrota=true;
                 }
                 if(misilEnemigo.coordenadaYMisil>=yAvion+avion.getHeight()/2 && misilEnemigo.coordenadaMisil>=xAvion && misilEnemigo.coordenadaMisil<xAvion+avion.getWidth()){
-                    derrota=true;
+                    explosiones.movimientoSpriteExplosionMiAvion();
+                    choquesArrayList.add(new Choques(this,xAvion-avion.getWidth()/2,yAvion+avion.getHeight()));
+                   // if(contadorFrames%60==0){
+                        derrota=true;
+
+
                 }
             }
 
@@ -507,6 +517,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
         }
 
+        public void dibujarDerrota(Canvas canvas){
+            canvas.drawBitmap(avionOut, xAvion,yAvion,null);
+        }
+
     /**
      * Este método dibuja el siguiente paso de la animación correspondiente
      */
@@ -568,11 +582,19 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 miexplosion.dibujarExplosion(canvas,myPaint);
             }
 
+            // Dibujamos la derrota
+            for (Choques choqueDerrota: choqueDerrotaArray){
+                dibujarDerrota(canvas);
+
+                choqueDerrota.dibujarExplosionDerrota(canvas,myPaint);
+            }
+
 
             if (contadorFrames <= 500){
                 myPaint.setColor(Color.RED);
                 canvas.drawText("Acaba con todos los misiles antes de que alcancen a tus tropas", AnchoPantalla/4,AltoPantalla/2,myPaint);
             }
+
 
             // Condiciones de drrota y victoria
             if (derrota==true){

@@ -65,7 +65,7 @@ public class Choques {
         return estadoExplosion>=9;
     }
     public void movimientoSpriteExplosion(){
-        if (j.contadorFrames%12==0) {
+        if (j.contadorFrames%6==0) {
             puntero_explosion = j.explosion.getWidth() / 8 * estadoExplosion;
             estadoExplosion++;
         }
@@ -84,8 +84,8 @@ public class Choques {
     public void dibujarExplosionDerrota(Canvas canvas, Paint paint){
 
         //En coordenadas le pongo entre 1.5 para adecuar
-        canvas.drawBitmap(j.explosionDerrota, new Rect((int) puntero_explosion, 0, (int) (puntero_explosion+j.explosion.getWidth()/15), j.explosion.getHeight()),
-                new Rect((int)coordenadaXExplosionl, (int) coordenadaYExplosion, (int)coordenadaXExplosionl+j.explosion.getWidth()/15, (int) coordenadaYExplosion+j.explosion.getHeight()),
+        canvas.drawBitmap(j.explosionDerrota, new Rect((int) puntero_explosion, 0, (int) (puntero_explosion+j.explosionDerrota.getWidth()/15), j.explosionDerrota.getHeight()),
+                new Rect((int)coordenadaXExplosionl, (int) coordenadaYExplosion, (int)coordenadaXExplosionl+j.explosion.getWidth()/15, (int) coordenadaYExplosion+j.explosionDerrota.getHeight()),
                 null);
         Log.d("EXPLOSIÓN Derrota: ", " Y Mi explosion: " + coordenadaYExplosion +
                 " X mi  explosion: " + coordenadaXExplosionl);
@@ -94,7 +94,7 @@ public class Choques {
 
     public void movimientoSpriteExplosionMiAvion() {
         if (j.contadorFrames % 12 == 0) {
-            puntero_explosion = j.explosionDerrota.getWidth() / 8 * estadoExplosion;
+            puntero_explosion = j.explosionDerrota.getWidth() / 15 * estadoExplosion;
             estadoExplosion++;
         }
     }
