@@ -27,6 +27,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap miMisil;
     public Bitmap explosion, explosionDerrota;
     public Bitmap banderaNazi, banderaComunista;
+    public boolean avionRoto;
 
 
     private SurfaceHolder holder;
@@ -423,7 +424,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 if(exp.estadoExplosion>=9) it_explosiones.remove();
             }
 
-
             // Mi explosion derrota
             for(MisilEnemigo misilEnemigo: misilesEnemigos){
                 if(misilEnemigo.coordenadaYMisil>=AltoPantalla){
@@ -435,7 +435,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     choquesArrayList.add(new Choques(this,xAvion-avion.getWidth()/2,yAvion+avion.getHeight()));
                    // if(contadorFrames%60==0){
                         derrota=true;
-
+                    avionRoto=true;
 
                 }
             }
@@ -648,8 +648,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawText("¡Rusia te ganó!", 0, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("No pudiste cambiar el curso de la historia", 0, AltoPantalla/2+100, myPaint);
-            dibujarDerrota(canvas);
-
+            if(avionRoto) {
+                dibujarDerrota(canvas);
+            }
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
@@ -660,7 +661,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawText("¡Alemania te ganó!", 0, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("El curso de la historia tomará otros derroteros", 0, AltoPantalla/2+100, myPaint);
-            dibujarDerrota(canvas);
+            if(avionRoto) {
+                dibujarDerrota(canvas);
+            }
 
         }
     }
