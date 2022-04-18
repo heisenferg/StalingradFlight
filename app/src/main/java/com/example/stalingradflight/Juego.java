@@ -102,28 +102,32 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Sonido
         sonidoAvion();
 
-        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondoancho);
-        mapaH = bmpMapa.getHeight();
-        mapaW = bmpMapa.getWidth();
 
-        //Mapa, ancho, alto, filtro
-        bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
+
 
         //Banderas para fin de juego:
         banderaNazi = BitmapFactory.decodeResource(getResources(), R.drawable.banderanazi);
         banderaComunista = BitmapFactory.decodeResource(getResources(), R.drawable.banderacomunista);
 
         if (MainActivity.BANDO == 1){
+            bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondo2);
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.naziplane2);
             avionOut = BitmapFactory.decodeResource(getResources(), R.drawable.naziplaneout);
 
         } else {
+            bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondoancho);
             avion = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplane);
             avionOut = BitmapFactory.decodeResource(getResources(), R.drawable.comunismplaneout);
 
         }
         Log.d("BANDO: " , " es " + MainActivity.BANDO);
 
+        mapaH = bmpMapa.getHeight();
+        mapaW = bmpMapa.getWidth();
+
+
+        //Mapa, ancho, alto, filtro
+        bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
 
         deltaT = 1f/BucleJuego.MAX_FPS;
 
@@ -733,9 +737,21 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     // Para liberar recursos
     public void fin(){
         bucle.ejecutandose=false;
-        reprductor.release();
-        musica.release();
-        //musicaFondo.reproductor.release();
+       try{
+           if (reprductor.isPlaying()){
+               reprductor.release();
+
+           }
+           if (musica.isPlaying()){
+               musica.release();
+           }
+           if (musicaFondo.reproductor.isPlaying()) {
+               musicaFondo.reproductor.release();
+           }
+       } catch (Exception e){
+           Log.d("Excepción: ", "reproductores");
+       }
+
         bmpMapa.recycle();
         avion.recycle();
         misilEnemigo.recycle();
