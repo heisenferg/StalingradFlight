@@ -422,6 +422,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
 
+            if (misilesDestruidos>=12){
+                musica.stop();
+                musicaFondo = new Musica(this);
+            }
+
+
 
         }
 
@@ -718,6 +724,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         bucle.ejecutandose=false;
         reprductor.release();
         musica.release();
+        musicaFondo.reproductor.release();
         bmpMapa.recycle();
         avion.recycle();
         misilEnemigo.recycle();
