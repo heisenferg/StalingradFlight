@@ -102,7 +102,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Sonido
         sonidoAvion();
 
-        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondo);
+        bmpMapa = BitmapFactory.decodeResource(getResources(), R.drawable.fondoancho);
         mapaH = bmpMapa.getHeight();
         mapaW = bmpMapa.getWidth();
 
@@ -646,7 +646,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("¡Rusia te ganó!", 0, AltoPantalla/2-100, myPaint);
-            myPaint.setTextSize(AnchoPantalla/20);
+            myPaint.setTextSize(AnchoPantalla/30);
             canvas.drawText("No pudiste cambiar el curso de la historia", 0, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
             canvas.drawText("Acabaste con " + misilesDestruidos + " misiles comunistas", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
@@ -663,7 +663,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("¡Alemania te ganó!", 0, AltoPantalla/2-100, myPaint);
-            myPaint.setTextSize(AnchoPantalla/20);
+            myPaint.setTextSize(AnchoPantalla/30);
             canvas.drawText("El curso de la historia tomará otros derroteros", 0, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
             canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
