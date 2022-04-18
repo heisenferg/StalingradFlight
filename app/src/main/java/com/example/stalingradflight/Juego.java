@@ -618,7 +618,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
-            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/3, AltoPantalla/2+100, myPaint);
+            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
         }
         if (MainActivity.BANDO==2){
@@ -630,7 +630,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Acabaste con todos los misiles Nazis", AnchoPantalla/4, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
-            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/3, AltoPantalla/2+100, myPaint);
+            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
 
         }
@@ -649,7 +649,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("No pudiste cambiar el curso de la historia", 0, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
-            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles comunistas", AnchoPantalla/3, AltoPantalla/2+100, myPaint);
+            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles comunistas", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
             // Si avionRoto = true; dibujamos el avión explotado | Cuando nos choca misil
             if(avionRoto) {
@@ -666,7 +666,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("El curso de la historia tomará otros derroteros", 0, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
-            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/3, AltoPantalla/2+100, myPaint);
+            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
             if(avionRoto) {
                 dibujarDerrota(canvas);
