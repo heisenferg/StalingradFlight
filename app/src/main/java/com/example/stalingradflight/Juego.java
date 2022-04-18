@@ -28,6 +28,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap explosion, explosionDerrota;
     public Bitmap banderaNazi, banderaComunista;
     public boolean avionRoto;
+    public int misilesPasados=0;
 
 
     private SurfaceHolder holder;
@@ -333,17 +334,15 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
              * NIVELES CAMBIAR
              */
             if (misilesDestruidos>=3){
-                victoria = true;
-
                 nivel=2;
             }
-            if (misilesDestruidos>=20){
+            if (misilesDestruidos>=6){
                 nivel=3;
             }
-            if (misilesDestruidos>=30){
+            if (misilesDestruidos>=9){
                 nivel=4;
             }
-            if (misilesDestruidos==40){
+            if (misilesDestruidos==12){
                 victoria = true;
             }
 
@@ -425,22 +424,20 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
             // Mi explosion derrota
-            for(MisilEnemigo misilEnemigo: misilesEnemigos){
+            for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();){
+                MisilEnemigo misilEnemigo = it_enemigos.next();
                 if(misilEnemigo.coordenadaYMisil>=AltoPantalla){
-
-                    derrota=true;
+                        derrota=true;
                 }
                 if(misilEnemigo.coordenadaYMisil>=yAvion+avion.getHeight()/2 && misilEnemigo.coordenadaMisil>=xAvion && misilEnemigo.coordenadaMisil<xAvion+avion.getWidth()){
                     explosiones.movimientoSpriteExplosionMiAvion();
                     choquesArrayList.add(new Choques(this,xAvion-avion.getWidth()/2,yAvion+avion.getHeight()));
-                   // if(contadorFrames%60==0){
-                        derrota=true;
+                    derrota=true;
                     avionRoto=true;
 
                 }
             }
 
-           // comprobarDerrota();
 
 
         }
@@ -560,6 +557,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawText("Misiles destruidos:"+ misilesDestruidos, controles[DERECHA].xCoordenada+controles[DERECHA].Ancho()+50,
                     controles[DERECHA].yCoordenada+controles[DERECHA].Alto()/2+50, myPaint);
 
+
             //Dibujar controles
             myPaint.setAlpha(400);
             for (int i = 0; i<4; i++){
@@ -593,6 +591,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             if (contadorFrames <= 500){
                 myPaint.setColor(Color.RED);
                 canvas.drawText("Acaba con todos los misiles antes de que alcancen a tus tropas", AnchoPantalla/4,AltoPantalla/2,myPaint);
+                canvas.drawText("Si uno se te escapa, pierdes; si te toca...mueres.", AnchoPantalla/4,AltoPantalla/2+100,myPaint);
+                myPaint.setTextSize(AnchoPantalla/30);
+                canvas.drawText("¡Acaba con ellos!", AnchoPantalla/3,AltoPantalla/2+200,myPaint);
+
             }
 
 
@@ -615,7 +617,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         if (MainActivity.BANDO==1){
             //Bandera Nazi Victoria
-            canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
+            canvas.drawBitmap(banderaNazi, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight()*2, null);
             myPaint.setColor(Color.GREEN);
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("¡Alemania ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
@@ -641,12 +643,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         if (MainActivity.BANDO==1){
             //Bandera Nazi Victoria
-            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight(), null);
+            canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaNazi.getWidth()/2, AltoPantalla-banderaNazi.getHeight()*2, null);
 
             myPaint.setTextSize(AnchoPantalla/10);
             canvas.drawText("¡Rusia te ganó!", 0, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("No pudiste cambiar el curso de la historia", 0, AltoPantalla/2+100, myPaint);
+
+            // Si avionRoto = true; dibujamos el avión explotado | Cuando nos choca misil
             if(avionRoto) {
                 dibujarDerrota(canvas);
             }
