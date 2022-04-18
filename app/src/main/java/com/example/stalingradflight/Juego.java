@@ -28,9 +28,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     public Bitmap explosion, explosionDerrota;
     public Bitmap banderaNazi, banderaComunista;
     public boolean avionRoto;
-    public int misilesPasados=0;
-
-
+    //public int misilesPasados=0;
     private SurfaceHolder holder;
     private BucleJuego bucle;
     private Activity activity;
@@ -38,21 +36,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     private int maxX=0;
     private int maxY=0;
     public int contadorFrames=0;
-    private boolean hacia_abajo=true;
     private static final String TAG = Juego.class.getSimpleName();
-    // private int xMario=0, yMario=0;
     private int mapaH, mapaW;
-    private int destMapaY;
+    //private int destMapaY;
     private int estadoAvion =1;
-    private int puntero_Avion_sprite =0;
+    //private int puntero_Avion_sprite =0;
     private int avionW, avionH;
-    private int contador_Frames = 0;
     private float yAvion;
     private float xAvion;
-
-    private int tiempoCrucePantalla = 3;
-    private float deltaT;
-    private boolean salta = false;
     private boolean hayToque=false;
     private ArrayList<Toque> toques = new ArrayList<Toque>();
     private Control[] controles = new Control[4];
@@ -90,16 +81,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         dimesionesPantalla();
         nivel=1;
 
-
+        // Cargas
         pintarEnemigo();
         cargarMiMisil();
         cargarExplosiones();
 
-
-
         Display mdisp = context.getWindowManager().getDefaultDisplay();
 
-        //Sonido
+        // Sonido de mi avión
         sonidoAvion();
 
 
@@ -129,7 +118,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         //Mapa, ancho, alto, filtro
         bmpMapa.createScaledBitmap(bmpMapa, mapaW, mapaH, false);
 
-        deltaT = 1f/BucleJuego.MAX_FPS;
 
 
         Point mdispSize = new Point();
@@ -139,30 +127,21 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         velocidad = AnchoPantalla/5/bucle.MAX_FPS;
 
 
-
-        // PRUEBAS
-        // nuevoMisil();
-
-
-        //explosiones = new Choques(this,400,500);
         iteradorMisilesMalos = misilesEnemigos.iterator();
         iteradorMisilesBuenos = miMisilDisparado.iterator();
 
-
         explotarMisil(AnchoPantalla,AltoPantalla);
-
-
     }
 
 
-
-
-
+    // Dibujar al enemigo
     public void pintarEnemigo(){
         misilEnemigo = BitmapFactory.decodeResource(getResources(), R.drawable.misilenemigo);
         misilEnemigo.createScaledBitmap(misilEnemigo, 70, 110, true);
     }
 
+
+    // Cargar los bitmaps de las explosiones
     public void cargarExplosiones(){
         //Cargo la explosión de mi avión en caso de derrota
         explosionDerrota = BitmapFactory.decodeResource(getResources(), R.drawable.explosionmiavion);
@@ -213,18 +192,15 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         maxY = c.getHeight();
         holder.unlockCanvasAndPost(c);
 
+        // Dimensiones del avión (alto y ancho)
         avionW = avion.getWidth();
         avionH = avion.getHeight();
-        // creamos el game loop
 
-
+        // Posición inicial de mi avión
         xAvion = maxX/2- avion.getWidth()/2;
         yAvion = (maxY / 5*4)-avion.getHeight()/2;
 
-
-
-
-        destMapaY = (AnchoPantalla-AltoPantalla)/2;
+       // destMapaY = (AnchoPantalla-AltoPantalla)/2;
 
 
         // se crea la superficie, creamos el game loop
@@ -236,9 +212,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         CargaControles();
 
-
-
-        //comenzar el bucle
+        // Comienza el bucle
         bucle.start();
 
     }
@@ -254,7 +228,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             contadorFrames++;
             estadoAvion++;
 
-            //Posición avion
+            /*
+            //Posición avion (Uso avion sin sprite porque no encuentro uno que me guste)
             puntero_Avion_sprite = avionW/3 * estadoAvion;
 
             if (contadorFrames%3==0){
@@ -262,6 +237,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     estadoAvion =1;
                 }
             }
+            */
 
 
             for (int i=0; i<4; i++){
@@ -286,6 +262,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 if (xAvion <maxX-avion.getWidth())
                     xAvion = (int) (xAvion + velocidad);
             }
+
+            // Acción botón disparo
             if (controles[DISPARO].pulsado){
                 // Controlamos que no podamos disparar más de un disparo cada 90 frames; aprox. 1,5 segundos
                 if (contadorFrames-tiempoUltimoDisparo>=90){
@@ -297,6 +275,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 }
 
             }
+
+            //Acción del botón música
             if (controles[MUSICA].pulsado){
                 musica.stop();
                 musicaFondo = new Musica(this);
@@ -306,16 +286,16 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             /**
              * NIVELES CAMBIAR
              */
-            if (misilesDestruidos>=3){
+            if (misilesDestruidos>=5){
                 nivel=2;
             }
-            if (misilesDestruidos>=6){
+            if (misilesDestruidos>=10){
                 nivel=3;
             }
-            if (misilesDestruidos>=9){
+            if (misilesDestruidos>=15){
                 nivel=4;
             }
-            if (misilesDestruidos==12){
+            if (misilesDestruidos==20){
                 victoria = true;
             }
 
@@ -325,11 +305,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 mapaX = 0;
                 mapaY = mapaY + 1;
             }
-            //Dimensiones fondo: 3839px
-            if (mapaY>=3839){
-                mapaY=0;
-            }
-
 
 
             int tiempoAleatorioMisilEnemigo = coordenada.nextInt(1500)+1;
@@ -356,10 +331,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
 
-            /*
-             */
-
-
             //Explosiones
             for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();) {
                 MisilEnemigo e = it_enemigos.next();
@@ -380,9 +351,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                         }
                         catch(Exception ex){}
                         misilesDestruidos++;
-                        // explosiones.movimientoSpriteExplosion();
-
-
                     }
 
                 }
@@ -426,7 +394,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
 
-            if (misilesDestruidos>=12){
+            // Cuando se gane, se pone el himno del ganador | Parando previamente la reproducción que haya
+            if (misilesDestruidos>=40){
                 musica.stop();
                 musicaFondo = new Musica(this);
             }
@@ -550,7 +519,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(40);
 
             myPaint.setColor(Color.GREEN);
-            canvas.drawText("Frames ejecutados:"+contadorFrames, 600, maxY/6*1, myPaint);
+           // canvas.drawText("Frames ejecutados:"+contadorFrames, 600, maxY/6*1, myPaint);
             canvas.drawText("Nivel:"+ nivel, controles[DERECHA].xCoordenada+controles[DERECHA].Ancho()+50,
                     controles[DERECHA].yCoordenada+controles[DERECHA].Alto()/2, myPaint);
             canvas.drawText("Misiles destruidos:"+ misilesDestruidos, controles[DERECHA].xCoordenada+controles[DERECHA].Ancho()+50,
@@ -610,6 +579,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
 
+    // Victoria
     public void victoriaFindeJuego(Paint myPaint, Canvas canvas){
         myPaint.setAlpha(0);
 
@@ -622,7 +592,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
-            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
+            canvas.drawText("Acabaste con " + misilesDestruidos + " misiles comunistas", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
         }
         if (MainActivity.BANDO==2){
@@ -630,9 +600,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawBitmap(banderaComunista, AnchoPantalla/2-banderaComunista.getWidth()/2, AltoPantalla-banderaComunista.getHeight()*2, null);
             myPaint.setColor(Color.RED);
             myPaint.setTextSize(AnchoPantalla/10);
-            canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
+            canvas.drawText("¡Ganó la URSS!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
-            canvas.drawText("Acabaste con todos los misiles Nazis", AnchoPantalla/4, AltoPantalla/2, myPaint);
+            canvas.drawText("¡Acabaste con todos los misiles Nazis!", AnchoPantalla/4, AltoPantalla/2, myPaint);
             myPaint.setColor(Color.MAGENTA);
             canvas.drawText("Acabaste con " + misilesDestruidos + " misiles nazis", AnchoPantalla/5, AltoPantalla/2+100, myPaint);
 
@@ -640,6 +610,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         }
     }
 
+    // Derrota
     public void derrotaFindeJuego(Paint myPaint, Canvas canvas){
         myPaint.setAlpha(0);
         myPaint.setColor(Color.RED);
@@ -680,6 +651,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
     }
 
+    // Sonidos derrota
     public void derrotadoSonidos(){
         reprductor = MediaPlayer.create(activity, R.raw.sonidosderrota);
         reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -692,6 +664,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
 
+    // Carga de misil
     public void cargarMiMisil(){
         if (MainActivity.BANDO ==1){
             //Misil nazi cargardo
@@ -706,6 +679,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
 
+    // Controles
     public void CargaControles(){
         float aux;
 
@@ -796,7 +770,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     toques.add(index, new Toque(index, x, y));
                 }
 
-                //se comprueba si se ha pulsado
+                // Se comprueba si se ha pulsado.
                 for(int i=0;i<4;i++)
                     controles[i].comprueba_Pulsado(x,y);
                 break;
@@ -806,7 +780,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     toques.remove(index);
                 }
 
-                //se comprueba si se ha soltado el botón
+                // Se comprueba si se ha soltado.
                 for(int i=0;i<4;i++)
                     controles[i].compruebaSoltado(toques);
                 break;
@@ -817,7 +791,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
                 }
                 hayToque=false;
-                //se comprueba si se ha soltado el botón
+                // Se comprueba si se ha soltado.
                 for(int i=0;i<4;i++)
                     controles[i].compruebaSoltado(toques);
                 break;
@@ -827,6 +801,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
 
+    // Sonido aviones
     public void sonidoAvion(){
         if (MainActivity.BANDO==1){
             musica = MediaPlayer.create(activity, R.raw.aircraftengine);
@@ -863,8 +838,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
         });
         reprductor.start();
     }
-
-
 
 
 }
