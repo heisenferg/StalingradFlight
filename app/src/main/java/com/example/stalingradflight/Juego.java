@@ -285,18 +285,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             if (controles[DISPARO].pulsado){
                 // Controlamos que no podamos disparar más de un disparo cada 90 frames; aprox. 1,5 segundos
                 if (contadorFrames-tiempoUltimoDisparo>=90){
-                   /* for (MisilEnemigo e: misilesEnemigos){
-                        Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
-
-                        if ((int)xAvion+avion.getWidth()/2 > (int) e.coordenadaMisil && (int)xAvion+avion.getWidth()/2 < (int)e.coordenadaMisil+misilEnemigo.getWidth()){
-                            Log.d("PRUEBA DISPARO: ", " xAvion: " + xAvion + " e.coordenadaMisil-misilEnemigo.getWidth(): " +e.coordenadaMisil +" ancho " + misilEnemigo.getWidth());
-                            ponerMisilMioNuevo();
-                        }
-                    }*/
                     ponerMisilMioNuevo();
-
                     tiempoUltimoDisparo=contadorFrames;
-
                 } else if (contadorFrames-tiempoUltimoDisparo<90) {
                     //Sonido sin munición
                     noMunicion();
@@ -304,27 +294,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             }
             if (controles[MUSICA].pulsado){
-               /* if (MainActivity.BANDO==1){
-                    musica = MediaPlayer.create(activity, R.raw.marchlow);
-                    musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mep) {
-                            mep.start();
-                        }
-                    });
-                    musica.start();
-                }
-                if (MainActivity.BANDO==2){
-                    musica = MediaPlayer.create(activity, R.raw.katilow);
-                    musica.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mep) {
-                            mep.start();
-                        }
-                    });
-                    musica.start();
-                }*/
-                // No funciona correctamente, entra la música tarde siempre
                 musica.stop();
                 musicaFondo = new Musica(this);
             }
@@ -351,6 +320,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             if (contadorFrames%2 == 0){
                 mapaX = 0;
                 mapaY = mapaY + 1;
+            }
+            //Dimensiones fondo: 3839px
+            if (mapaY>=3839){
+                mapaY=0;
             }
 
 
@@ -386,19 +359,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             //Explosiones
             for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();) {
                 MisilEnemigo e = it_enemigos.next();
+                explosiones.movimientoSpriteExplosion();
 
                 for(Iterator<MiMisil> it_disparos=miMisilDisparado.iterator();it_disparos.hasNext();) {
                     MiMisil d=it_disparos.next();
 
                     if (colision(e,d)) {
-
-                       // explotarMisil(e.coordenadaMisil,e.coordenadaYMisil);
-
                         choquesArrayList.add(new Choques(this,e.coordenadaMisil-avion.getWidth()/2, d.coordenadaYMisil-misilEnemigo.getHeight()/2));
                         Log.d("Choques en array: ", "e.coordenadaMisil: " + e.coordenadaMisil +
                                 " e.coordenadaYMisil: " + e.coordenadaYMisil + " d.coordenadaMisil: " +
                                 d.coordenadaMisil + " d.coordenadaYMisil: " + d.coordenadaYMisil);
-                        /* eliminamos de las listas tanto el disparo como el enemigo */
+                        // Borramos misil y disparo
                         try {
                             it_enemigos.remove();
                             it_disparos.remove();
@@ -411,9 +382,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                     }
 
                 }
+
             }
 
-            explosiones.movimientoSpriteExplosion();
 
 
             // Actualizar explosiones
@@ -426,16 +397,28 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             // Mi explosion derrota
             for(Iterator<MisilEnemigo> it_enemigos= misilesEnemigos.iterator();it_enemigos.hasNext();){
                 MisilEnemigo misilEnemigo = it_enemigos.next();
+                // Si el misil llega al final de la pantalla, derrota
                 if(misilEnemigo.coordenadaYMisil>=AltoPantalla){
-                        derrota=true;
+                    derrota=true;
+                    derrotadoSonidos();
                 }
+                // Si el misil se choca con nuestro avión, derrota
                 if(misilEnemigo.coordenadaYMisil>=yAvion+avion.getHeight()/2 && misilEnemigo.coordenadaMisil>=xAvion && misilEnemigo.coordenadaMisil<xAvion+avion.getWidth()){
                     explosiones.movimientoSpriteExplosionMiAvion();
-                    choquesArrayList.add(new Choques(this,xAvion-avion.getWidth()/2,yAvion+avion.getHeight()));
                     derrota=true;
                     avionRoto=true;
-
+                    // Sonido derrota por choque
+                    reprductor = MediaPlayer.create(activity, R.raw.myexplosion);
+                    reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.release();
+                        }
+                    });
+                    reprductor.start();
+                    derrotadoSonidos();
                 }
+
             }
 
 
@@ -474,8 +457,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 "xAvion: " + xAvion +" d.coordenadaYMisil:" + d.coordenadaYMisil);
         return Colision.hayColision(enemigo,(int) e.coordenadaMisil,(int) e.coordenadaYMisil-misilEnemigo.getHeight()/2,
                 disparo,(int)d.coordenadaMisil,(int)d.coordenadaYMisil);
+      /*  int alto_mayor=misilEnemigo.getHeight()>miMisil.getHeight()?misilEnemigo.getHeight():miMisil.getHeight();
+        int ancho_mayor=misilEnemigo.getWidth()>miMisil.getWidth()?misilEnemigo.getWidth():miMisil.getWidth();
+        float diferenciaX=Math.abs(e.coordenadaMisil-d.coordenadaMisil);
+        float diferenciaY=Math.abs(e.coordenadaYMisil-d.coordenadaYMisil);
+        return diferenciaX<ancho_mayor &&diferenciaY<alto_mayor;*/
     }
 
+  /*
     // Si choca misil enemigo contra mi avion
     public boolean colisionDerrota(MisilEnemigo e){
       Bitmap enemigo=e.bitmap();
@@ -497,12 +486,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
         Log.d("True: ", "es false");
 
-        return false;*/
+        return false;
 
     }
 
 
-
+/*
         public void comprobarDerrota() {
             //Explosión derrota
             for (MisilEnemigo e : misilesEnemigos) {
@@ -515,7 +504,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
                 }
             }
         }
-
+*/
         public void dibujarDerrota(Canvas canvas){
             canvas.drawBitmap(avionOut, xAvion,yAvion,null);
         }
@@ -590,22 +579,21 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
 
             if (contadorFrames <= 500){
                 myPaint.setColor(Color.RED);
-                canvas.drawText("Acaba con todos los misiles antes de que alcancen a tus tropas", AnchoPantalla/4,AltoPantalla/2,myPaint);
-                canvas.drawText("Si uno se te escapa, pierdes; si te toca...mueres.", AnchoPantalla/4,AltoPantalla/2+100,myPaint);
+                canvas.drawText("Acaba con todos los misiles antes de que alcancen a tus tropas", AnchoPantalla/4,AltoPantalla/4,myPaint);
+                canvas.drawText("Si uno se te escapa, pierdes; si te toca...mueres.", AnchoPantalla/4,AltoPantalla/4+100,myPaint);
                 myPaint.setTextSize(AnchoPantalla/30);
-                canvas.drawText("¡Acaba con ellos!", AnchoPantalla/3,AltoPantalla/2+200,myPaint);
-
+                canvas.drawText("¡Acaba con ellos!", AnchoPantalla/3,AltoPantalla/4+200,myPaint);
             }
 
 
             // Condiciones de drrota y victoria
             if (derrota==true){
-                //explosiones.dibujarExplosionDerrota(canvas, myPaint);
                 derrotaFindeJuego(myPaint, canvas);
             }
 
             if (victoria==true){
                victoriaFindeJuego(myPaint, canvas);
+
             }
 
         }
@@ -623,8 +611,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawText("¡Alemania ganó!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Cambiaste el curso de la historia", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
-            musica.stop();
-            musicaFondo = new Musica(this);
         }
         if (MainActivity.BANDO==2){
             // Bandera Comunista Victoria
@@ -634,6 +620,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             canvas.drawText("Ganó la URSS!!", AnchoPantalla/4, AltoPantalla/2-100, myPaint);
             myPaint.setTextSize(AnchoPantalla/20);
             canvas.drawText("Acabaste con todos los misiles Nazis", AnchoPantalla/4, AltoPantalla/2+100, myPaint);
+
         }
     }
 
@@ -669,6 +656,18 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
             }
 
         }
+
+    }
+
+    public void derrotadoSonidos(){
+        reprductor = MediaPlayer.create(activity, R.raw.sonidosderrota);
+        reprductor.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
+        reprductor.start();
     }
 
 
@@ -713,14 +712,26 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, View.O
     }
 
 
+
+    // Para liberar recursos
+    public void fin(){
+        bucle.ejecutandose=false;
+        reprductor.release();
+        musica.release();
+        bmpMapa.recycle();
+        avion.recycle();
+        misilEnemigo.recycle();
+        miMisil.recycle();
+    }
+
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(TAG, "Juego destruido!");
-        // cerrar el thread y esperar que acabe
+        Log.d(TAG, "Finalizmos el juego y sus recursos!");
         boolean retry = true;
         while (retry) {
             try {
-                // bucle.fin();
+                fin();
                 bucle.join();
                 retry = false;
             } catch (InterruptedException e) {

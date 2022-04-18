@@ -1,5 +1,6 @@
 package com.example.stalingradflight;
 
+
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
